@@ -1,0 +1,61 @@
+*{
+    margin:0;
+    padding: 0px;
+}
+body{
+    font-family: "Bricolage Grotesque", sans-serif;
+}
+button{
+    font-weight: bold;
+    border-radius: 15px;
+    height: 40px;
+    padding-top:10px ;
+    width: 110px;
+    padding-bottom: 20px;
+    border: 1px solid #2FB4ED;
+    color: white;
+    background-color: #3CD2F0;
+    text-transform: uppercase;
+    box-shadow:5px 5px rgba(20, 151, 212, 0.507);
+}
+section#home{
+    height: 100vh;/*view*/
+    background: #0571ff;
+    background: linear-gradient(90deg, rgba(5, 113, 255, 1) 0%, rgba(60, 210, 240, 1) 50%, rgba(47, 180, 237, 1) 100%);
+    padding-left: 50px;
+    padding-right: 50px;
+}
+section#home header{
+    display: flex;
+    justify-content: space-between;
+    padding-top: 30px;
+}
+section#home header div h1{
+    color:white;
+}
+section#home header nav ul{
+    display:flex;
+    gap: 10px;
+    margin-top: 08px;
+}
+section#home header nav ul li{
+    list-style: none;
+}
+section#home header nav ul li a{
+    color:white;
+    text-decoration: none;
+    font-size: 1.2rem;
+}
+section#home #content{
+    display:flex;
+    color:white;
+}
+section#home #content div{
+    flex:1;
+}
+section#home #content h2{
+    width: 60%;
+    font-size: 3rem;
+    color: white;
+    margin-top: 40px;
+}
