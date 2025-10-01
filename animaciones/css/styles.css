@@ -1,0 +1,68 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+#escena{
+    background-image: url('../img/bg.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    width: 100vw;
+    height: 100vh;
+    position:relative;
+}
+#pj{
+    position: absolute;
+    top:125px;
+    left: 170px;
+    width: 200px;
+    height: 200px;
+    animation-name: salto;
+    animation-duration: 10s;
+
+}
+#barril1{
+    position: absolute;
+    width: 160px;
+    height: 160px;
+    top: 515px;
+    left: 1230px;
+}
+#barril2{
+    position: absolute;
+    width: 160px;
+    height: 160px;
+    top: 530px;
+    left:180px;
+    transform: rotate(-20deg);
+}
+.girobarril{
+    animation-name: rotarBarril;
+    animation-duration: 3s;
+    animation-iteration-count:infinite;
+    animation-direction: alternate;
+}
+@keyframes rotarBarril{
+    from {
+        transform: rotate(-80deg);
+    }
+    to{
+        transform: rotate(80deg);
+    }
+}
+@keyframes salto{
+    0%{
+        top:-150px;
+    }
+    30%{
+        top:170px;
+    }
+    50%{
+        left:780px;
+        top:280px;
+    }
+    100%{
+        left:200px;
+        top:500px;
+    }
+}
