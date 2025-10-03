@@ -13,13 +13,15 @@
 }
 #pj{
     position: absolute;
-    top:125px;
+    top: 125px;
     left: 170px;
     width: 200px;
     height: 200px;
     animation-name: salto;
-    animation-duration: 10s;
-
+    animation-duration: 10s; 
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
+    z-index:10;
 }
 #barril1{
     position: absolute;
@@ -28,13 +30,14 @@
     top: 515px;
     left: 1230px;
 }
-#barril2{
+#barril2 {
     position: absolute;
     width: 160px;
     height: 160px;
     top: 530px;
-    left:180px;
+    left: 180px;
     transform: rotate(-20deg);
+    z-index: 15;
 }
 .girobarril{
     animation-name: rotarBarril;
@@ -50,19 +53,51 @@
         transform: rotate(80deg);
     }
 }
-@keyframes salto{
-    0%{
-        top:-150px;
+@keyframes salto {
+    55% { 
+        top: 180px;
+        left: 650px;
+        z-index: 10;
+        opacity: 1;
     }
-    30%{
-        top:170px;
+    70% {
+        top: 530px; 
+        left: 180px; 
+        z-index: 10;
+        transform: rotate(-20deg);
+        opacity: 1;
     }
-    50%{
-        left:780px;
-        top:280px;
+    70.1% { 
+        top: 530px; 
+        left: 180px; 
+        z-index: 10; 
+       opacity: 0;
     }
-    100%{
-        left:200px;
-        top:500px;
+    74% { 
+        top: 530px; 
+        left: 180px; 
+        z-index: 10; 
+        opacity: 0;
+    }
+    75% {
+        top: 500px;
+        left: 180px;
+        z-index: 10;
+        opacity: 1;
+        transform: rotate(0deg); 
+    }
+    85% {
+        top: 100px; 
+        left: 300px;
+        transform: rotate(360deg);
+        z-index: 20;
+        opacity: 1;
+    }
+    100% {
+        top: -500px;
+        left: 350px; 
+        transform: rotate(720deg);
+        z-index: 20;
+        opacity: 1;
     }
 }
