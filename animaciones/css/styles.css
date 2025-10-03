@@ -18,7 +18,7 @@
     width: 200px;
     height: 200px;
     animation-name: salto;
-    animation-duration: 10s; 
+    animation-duration: 8s; 
     animation-timing-function: ease-in-out;
     animation-fill-mode: forwards;
     z-index:10;
@@ -54,6 +54,26 @@
     }
 }
 @keyframes salto {
+    0% {
+     top: -150px; 
+     left: 170px;
+     z-index: 10;
+   }
+    10% {
+     top: 125px;
+     left: 170px;
+     z-index: 10;
+     }
+     25% { 
+     top: 0px;
+     left: 450px;
+     z-index: 10;
+     }
+     40% {
+     top: 260px;
+     left: 800px; 
+     z-index: 10; 
+     }
     55% { 
         top: 180px;
         left: 650px;
@@ -85,13 +105,6 @@
         z-index: 10;
         opacity: 1;
         transform: rotate(0deg); 
-    }
-    85% {
-        top: 100px; 
-        left: 300px;
-        transform: rotate(360deg);
-        z-index: 20;
-        opacity: 1;
     }
     100% {
         top: -500px;
