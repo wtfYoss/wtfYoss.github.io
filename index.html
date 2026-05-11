@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PORTAFOLIO — DAYANA // L&A II</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Barlow+Condensed:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black:#0a0a0a;
+  --magenta:#FF0076;
+  --yellow:#F5E500;
+  --cyan:#00F0FF;
+  --white:#F0EDE6;
+  --gray:#1a1a1a;
+  --gray2:#2a2a2a;
+  --gray3:#111111;
+  --font-d:'Bebas Neue',sans-serif;
+  --font-b:'Barlow Condensed',sans-serif;
+  --font-m:'Share Tech Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{min-height:100%;font-family:var(--font-b);background:var(--black);color:var(--white);cursor:crosshair;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:0.4;}
+
+/* ── LAYOUT ── */
+.app{display:flex;min-height:100vh;}
+.sidebar{width:230px;background:var(--black);border-right:3px solid var(--magenta);padding:24px 16px;display:flex;flex-direction:column;gap:24px;flex-shrink:0;position:sticky;top:0;height:100vh;overflow-y:auto;}
+.main{flex:1;padding:28px 36px;display:flex;flex-direction:column;gap:0;overflow-y:auto;}
+
+/* ── SIDEBAR ── */
+.brand{padding-bottom:20px;border-bottom:1px solid #222;}
+.brand-av{width:52px;height:52px;border:3px solid var(--magenta);display:flex;align-items:center;justify-content:center;font-family:var(--font-d);font-size:24px;color:var(--magenta);background:var(--gray);margin-bottom:10px;}
+.brand-name{font-family:var(--font-d);font-size:30px;letter-spacing:3px;display:block;line-height:1;}
+.brand-sub{font-family:var(--font-m);font-size:9px;color:var(--magenta);letter-spacing:2px;display:block;margin-top:4px;}
+.nav-label{font-family:var(--font-m);font-size:9px;color:#444;letter-spacing:2px;margin-bottom:6px;}
+.nav{display:flex;flex-direction:column;gap:2px;}
+.nav-btn{display:flex;align-items:center;gap:8px;padding:9px 12px;cursor:pointer;font-family:var(--font-d);font-size:19px;letter-spacing:1px;background:none;border:none;border-left:3px solid transparent;color:#555;width:100%;text-align:left;transition:all .15s;}
+.nav-btn:hover{color:var(--white);border-left-color:var(--yellow);background:rgba(245,229,0,.05);}
+.nav-btn.active{color:var(--magenta);border-left-color:var(--magenta);background:rgba(255,0,118,.08);}
+.nav-arrow{font-family:var(--font-m);font-size:13px;color:var(--magenta);width:14px;flex-shrink:0;}
+.nav-sub{display:none;flex-direction:column;gap:0;margin-left:16px;border-left:1px solid #2a2a2a;padding-left:10px;}
+.nav-btn.active + .nav-sub{display:flex;}
+.sub-btn{display:block;padding:5px 4px;cursor:pointer;font-family:var(--font-m);font-size:10px;letter-spacing:1px;background:none;border:none;color:#555;width:100%;text-align:left;transition:color .12s;}
+.sub-btn:hover,.sub-btn.active{color:var(--yellow);}
+
+/* ── TOPBAR ── */
+.topbar{display:flex;align-items:center;gap:12px;padding-bottom:22px;border-bottom:1px solid #1f1f1f;margin-bottom:28px;}
+.topbar-title{font-family:var(--font-d);font-size:14px;letter-spacing:4px;color:#444;}
+
+/* ── VIEWS ── */
+.view{display:none;flex-direction:column;gap:26px;animation:fadeIn .2s ease;}
+.view.active{display:flex;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* ── HERO ── */
+.hero-title{font-family:var(--font-d);font-size:52px;letter-spacing:3px;line-height:1;}
+.hero-title .acc-m{color:var(--magenta);}
+.hero-title .acc-y{color:var(--yellow);}
+.hero-sub{font-family:var(--font-m);font-size:11px;color:#555;letter-spacing:2px;margin-top:6px;}
+
+/* ── PROFILE STRIP ── */
+.profile-strip{display:grid;grid-template-columns:130px 1fr;border:2px solid var(--magenta);background:var(--gray);overflow:hidden;position:relative;}
+.profile-strip::before{content:'LENGUAJES Y AUTÓMATAS II // TecNM // SCD-1016';position:absolute;top:0;left:0;right:0;background:var(--magenta);color:var(--black);font-family:var(--font-m);font-size:9px;letter-spacing:2px;padding:4px 12px;z-index:1;}
+.profile-photo{overflow:hidden;border-right:2px solid var(--magenta);margin-top:22px;}
+.profile-photo img{width:100%;height:100%;object-fit:cover;object-position:center top;filter:contrast(1.1) saturate(.85);}
+.profile-info{padding:32px 20px 20px;display:flex;flex-direction:column;gap:10px;}
+.profile-name{font-family:var(--font-d);font-size:40px;letter-spacing:4px;line-height:1;}
+.profile-bio{font-size:14px;color:#aaa;line-height:1.6;}
+
+/* ── STATS ── */
+.stats{display:flex;border:1px solid #222;align-items:stretch;}
+.stat{flex:1;text-align:center;padding:14px 10px;border-right:1px solid #222;}
+.stat:last-child{border-right:none;flex:2;display:flex;flex-direction:column;justify-content:center;padding:14px 20px;}
+.stat-n{font-family:var(--font-d);font-size:30px;color:var(--yellow);display:block;line-height:1;}
+.stat-l{font-family:var(--font-m);font-size:9px;color:#444;letter-spacing:2px;display:block;margin-top:3px;}
+.prog-row{display:flex;justify-content:space-between;font-family:var(--font-m);font-size:10px;color:#555;margin-bottom:7px;}
+.prog-row span:last-child{color:var(--yellow);}
+.prog-bar{height:5px;background:#1f1f1f;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--magenta),var(--yellow));}
+
+/* ── SECTION HEADER ── */
+.sec-head{font-family:var(--font-d);font-size:28px;letter-spacing:2px;color:var(--white);border-bottom:2px solid var(--magenta);padding-bottom:8px;display:flex;justify-content:space-between;align-items:baseline;}
+.sec-tag{font-family:var(--font-m);font-size:9px;color:var(--magenta);letter-spacing:2px;}
+
+/* ── TOPIC GRID ── */
+.topic-grid{display:grid;grid-template-columns:1fr;gap:10px;}
+.topic-card{background:var(--gray);border:1px solid #2a2a2a;padding:0;cursor:pointer;transition:border-color .15s,transform .15s;position:relative;overflow:hidden;}
+.topic-card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;background:linear-gradient(180deg,var(--magenta),var(--yellow));}
+.topic-card:hover{border-color:var(--magenta);transform:translateX(4px);}
+.topic-card.open{border-color:var(--cyan);}
+.topic-card.open::before{background:var(--cyan);}
+.tc-head{padding:22px 24px 22px 28px;display:flex;align-items:center;gap:20px;}
+.tc-num{font-family:var(--font-m);font-size:12px;color:var(--magenta);flex-shrink:0;min-width:42px;letter-spacing:1px;}
+.topic-card.open .tc-num{color:var(--cyan);}
+.tc-title{font-family:var(--font-d);font-size:26px;letter-spacing:1px;color:var(--white);line-height:1;}
+.tc-sub{font-size:12px;color:#555;margin-top:4px;font-family:var(--font-m);letter-spacing:.5px;}
+.tc-toggle{margin-left:auto;font-family:var(--font-m);font-size:18px;color:#444;flex-shrink:0;transition:transform .2s;width:28px;height:28px;display:flex;align-items:center;justify-content:center;border:1px solid #2a2a2a;}
+.topic-card:hover .tc-toggle{border-color:#444;color:var(--white);}
+.topic-card.open .tc-toggle{transform:rotate(45deg);color:var(--cyan);border-color:var(--cyan);}
+.tc-body{display:none;padding:0 28px 28px 28px;border-top:1px solid #1f1f1f;}
+.topic-card.open .tc-body{display:block;}
+.tc-content{padding-top:20px;}
+.tc-content p{font-size:15px;color:#bbb;line-height:1.75;margin-bottom:12px;}
+.tc-content h4{font-family:var(--font-m);font-size:10px;color:var(--magenta);letter-spacing:2px;margin:20px 0 8px;text-transform:uppercase;}
+.tc-content ul{list-style:none;display:flex;flex-direction:column;gap:6px;}
+.tc-content ul li{font-size:14px;color:#999;padding-left:16px;position:relative;line-height:1.6;}
+.tc-content ul li::before{content:'›';position:absolute;left:0;color:var(--magenta);}
+.tc-content .code-ex{background:#0d0d0d;border:1px solid #222;border-left:3px solid var(--cyan);padding:14px 18px;margin-top:14px;font-family:var(--font-m);font-size:11px;color:var(--cyan);line-height:1.9;overflow-x:auto;white-space:pre;}
+.tc-content .tag-row{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px;}
+.tc-content .tag{font-family:var(--font-m);font-size:9px;letter-spacing:1px;padding:4px 10px;border:1px solid #333;color:#555;}
+.tc-content .tag.m{border-color:var(--magenta);color:var(--magenta);}
+.tc-content .tag.y{border-color:var(--yellow);color:var(--yellow);}
+.tc-content .tag.c{border-color:var(--cyan);color:var(--cyan);}
+
+/* ── COMING SOON ── */
+.soon{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:400px;gap:18px;border:1px solid #1f1f1f;padding:40px;position:relative;overflow:hidden;}
+.soon::before{content:'✕';position:absolute;font-size:260px;color:#0f0f0f;font-family:var(--font-d);pointer-events:none;line-height:1;}
+.soon-t{font-family:var(--font-d);font-size:72px;letter-spacing:6px;position:relative;}
+.soon-s{font-family:var(--font-m);font-size:12px;color:#444;text-align:center;max-width:320px;line-height:1.7;letter-spacing:1px;position:relative;}
+.soon-badge{background:none;border:2px solid var(--magenta);color:var(--magenta);font-family:var(--font-d);font-size:20px;letter-spacing:4px;padding:8px 24px;position:relative;}
+.dots{display:flex;gap:10px;position:relative;}
+.dot-a{width:8px;height:8px;background:var(--magenta);animation:bounce 1.2s infinite ease-in-out;}
+.dot-a:nth-child(2){animation-delay:.2s;background:var(--yellow);}
+.dot-a:nth-child(3){animation-delay:.4s;}
+@keyframes bounce{0%,80%,100%{transform:scale(.6);opacity:.3}40%{transform:scale(1.2);opacity:1}}
+
+/* ── EVIDENCIAS SECTION ── */
+.ev-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;}
+.ev-card{background:var(--gray);border:1px solid #2a2a2a;overflow:hidden;transition:border-color .15s,transform .15s;}
+.ev-card:hover{border-color:var(--magenta);transform:translateY(-3px);}
+.ev-thumb{height:90px;display:flex;align-items:center;justify-content:center;border-bottom:2px solid #1f1f1f;overflow:hidden;}
+.ev-thumb img{width:100%;height:100%;object-fit:cover;filter:grayscale(20%);}
+.ev-add{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;}
+.ev-add span{font-family:var(--font-m);font-size:9px;color:#333;letter-spacing:2px;}
+.ev-add .plus{font-size:20px;color:#2a2a2a;}
+.ev-body{padding:12px;}
+.ev-tag{display:inline-block;border:1px solid var(--magenta);color:var(--magenta);font-family:var(--font-m);font-size:9px;letter-spacing:1px;padding:2px 7px;margin-bottom:6px;}
+.ev-title{font-size:13px;font-weight:700;color:var(--white);line-height:1.4;margin-bottom:8px;}
+.ev-footer{display:flex;justify-content:space-between;font-family:var(--font-m);font-size:10px;color:#444;padding-top:8px;border-top:1px solid #1f1f1f;}
+.grade{background:var(--yellow);color:var(--black);font-family:var(--font-d);font-size:16px;padding:0 8px 2px;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .app{flex-direction:column;}
+  .sidebar{width:100%;height:auto;position:relative;border-right:none;border-bottom:3px solid var(--magenta);}
+  .main{padding:20px;}
+  .profile-strip{grid-template-columns:1fr;}
+  .profile-photo{border-right:none;border-bottom:2px solid var(--magenta);height:180px;}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- ══ SIDEBAR ══ -->
+<aside class="sidebar">
+  <div class="brand">
+    <div class="brand-av">D</div>
+    <span class="brand-name">DAYANA</span>
+    <span class="brand-sub">// PORTAFOLIO DIGITAL</span>
+  </div>
+
+  <div>
+    <div class="nav-label">// UNIDADES</div>
+    <nav class="nav">
+      <button class="nav-btn active" data-view="u1">
+        <div class="nav-arrow">›</div>
+        UNIDAD 1
+      </button>
+      <div class="nav-sub" id="sub1">
+        <button class="sub-btn" data-goto="u1-t11">1.1 Árboles</button>
+        <button class="sub-btn" data-goto="u1-t12">1.2 Acciones semánticas</button>
+        <button class="sub-btn" data-goto="u1-t13">1.3 Tipos</button>
+        <button class="sub-btn" data-goto="u1-t14">1.4 Pila semántica</button>
+        <button class="sub-btn" data-goto="u1-t15">1.5 Esquema</button>
+        <button class="sub-btn" data-goto="u1-t16">1.6 Tabla símbolos</button>
+        <button class="sub-btn" data-goto="u1-t17">1.7 Errores</button>
+      </div>
+
+      <button class="nav-btn" data-view="u2">
+        <div class="nav-arrow"></div>
+        UNIDAD 2
+      </button>
+      <div class="nav-sub" id="sub2">
+        <button class="sub-btn" data-goto="u2-t21">2.1 Notaciones</button>
+        <button class="sub-btn" data-goto="u2-t22">2.2 Representaciones</button>
+        <button class="sub-btn" data-goto="u2-t23">2.3 Esquema generación</button>
+      </div>
+
+      <button class="nav-btn" data-view="u3">
+        <div class="nav-arrow"></div>
+        UNIDAD 3
+      </button>
+      <div class="nav-sub" id="sub3">
+        <button class="sub-btn" data-goto="u3-t31">3.1 Tipos optimización</button>
+        <button class="sub-btn" data-goto="u3-t32">3.2 Costos</button>
+      </div>
+
+      <button class="nav-btn" data-view="u4">
+        <div class="nav-arrow"></div>
+        UNIDAD 4
+      </button>
+    </nav>
+  </div>
+</aside>
+
+<!-- ══ MAIN ══ -->
+<main class="main">
+
+  <div class="topbar">
+    <span class="topbar-title">// LENGUAJES Y AUTÓMATAS II — SCD-1016 — INGENIERÍA EN SISTEMAS COMPUTACIONALES</span>
+  </div>
+
+  <!-- ══════════════════════════════════
+       UNIDAD 1 — ANÁLISIS SEMÁNTICO
+  ══════════════════════════════════ -->
+  <div class="view active" id="view-u1">
+
+    <div>
+      <div class="hero-title">ANÁLISIS <span class="acc-m">SEMÁNTICO</span></div>
+      <div class="hero-sub">// UNIDAD 1 — 7 TEMAS — ANALIZADOR SEMÁNTICO PARA UN COMPILADOR</div>
+    </div>
+
+    <div class="profile-strip">
+      <div class="profile-photo">
+        <img src="/img/yo (2).jpeg" alt="Dayana">
+      </div>
+      <div class="profile-info">
+        <div class="profile-name">DAYANA</div>
+        <p class="profile-bio">La verdad medio intento jugarle a la ingeniería, así como si le supiera. Dijo el profe que hiciéramos un portafolio y pues ajá, aquí estoy intentando que mínimo funcione. La idea es que se vea profesional, más o menos. Bueno equis, el portafolio existe. En fin. Se intentó. Se documentó. Se sobrevivió. Besos.</p>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><span class="stat-n">7</span><span class="stat-l">temas</span></div>
+      <div class="stat"><span class="stat-n">4</span><span class="stat-l">evidencias</span></div>
+      <div class="stat"><span class="stat-n">100%</span><span class="stat-l">completada</span></div>
+      <div class="stat">
+        <div class="prog-row"><span>// AVANCE UNIDAD 1</span><span>100%</span></div>
+        <div class="prog-bar"><div class="prog-fill" style="width:100%"></div></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="sec-head">TEMAS <span class="sec-tag">// DA CLIC PARA EXPANDIR CADA TEMA</span></div>
+    </div>
+
+    <div class="topic-grid">
+
+      <!-- 1.1 -->
+      <div class="topic-card" id="u1-t11">
+        <div class="tc-head">
+          <span class="tc-num">1.1</span>
+          <div>
+            <div class="tc-title">Árboles de Expresiones</div>
+            <div class="tc-sub">Representación jerárquica</div>
+          </div>
+          <span class="tc-toggle">+</span>
+        </div>
+        <div class="tc-body">
+          <div class="tc-content">
+            <p>Un <strong>árbol de expresiones</strong> (o árbol sintáctico abstracto, AST) es una estructura jerárquica en forma de árbol que representa la estructura de una expresión matemática o de un programa. Los nodos internos son operadores y las hojas son operandos (valores o variables).</p>
+            <h4>Características</h4>
+            <ul>
+              <li>Los nodos hoja representan operandos (números, variables)</li>
+              <li>Los nodos internos representan operadores (+, -, *, /)</li>
+              <li>La raíz del árbol es el operador de menor precedencia</li>
+              <li>La evaluación se realiza de abajo hacia arriba (post-orden)</li>
+            </ul>
+            <h4>Ejemplo — expresión: (a + b) * c</h4>
+            <div class="code-ex">       *
+      / \
+     +   c
+    / \
+   a   b
+
+Evaluación post-orden: a b + c *</div>
+            <h4>Tipos de recorridos</h4>
+            <ul>
+              <li><strong>Pre-orden:</strong> raíz → izquierdo → derecho (notación prefija)</li>
+              <li><strong>In-orden:</strong> izquierdo → raíz → derecho (notación infija)</li>
+              <li><strong>Post-orden:</strong> izquierdo → derecho → raíz (notación postfija)</li>
+            </ul>
+            <div class="tag-row">
+              <span class="tag m">AST</span>
+              <span class="tag m">compiladores</span>
+              <span class="tag y">análisis sintáctico</span>
+              <span class="tag">árbol binario</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1.2 -->
+      <div class="topic-card" id="u1-t12">
+        <div class="tc-head">
+          <span class="tc-num">1.2</span>
+          <div>
+            <div class="tc-title">Acciones Semánticas</div>
+            <div class="tc-sub">Del analizador sintáctico</div>
+          </div>
+          <span class="tc-toggle">+</span>
+        </div>
+        <div class="tc-body">
+          <div class="tc-content">
+            <p>Las <strong>acciones semánticas</strong> son fragmentos de código que se asocian a las reglas de producción de una gramática. Se ejecutan cuando el analizador sintáctico reconoce (reduce) una producción. Son el puente entre el análisis sintáctico y el semántico.</p>
+            <h4>¿Para qué sirven?</h4>
+            <ul>
+              <li>Construir el árbol sintáctico abstracto (AST)</li>
+              <li>Verificar tipos y declaraciones de variables</li>
+              <li>Generar código intermedio</li>
+              <li>Actualizar la tabla de símbolos</li>
+            </ul>
+            <h4>Ejemplo — gramática con acción</h4>
+            <div class="code-ex">E → E '+' T   { E.val = E1.val + T.val }
+E → T         { E.val = T.val }
+T → num       { T.val = num.lexval }</div>
+            <h4>Tipos de atributos</h4>
+            <ul>
+              <li><strong>Sintetizados:</strong> se propagan de hijos a padres</li>
+              <li><strong>Heredados:</strong> se propagan de padres a hijos</li>
+              <li><strong>Definición dirigida por sintaxis (SDD):</strong> conjunto de atributos + reglas</li>
+            </ul>
+            <div class="tag-row">
+              <span class="tag m">SDD</span>
+              <span class="tag m">atributos</span>
+              <span class="tag c">sintetizados</span>
+              <span class="tag c">heredados</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1.3 -->
+      <div class="topic-card" id="u1-t13">
+        <div class="tc-head">
+          <span class="tc-num">1.3</span>
+          <div>
+            <div class="tc-title">Comprobación de Tipos</div>
+            <div class="tc-sub">En expresiones y operadores</div>
+          </div>
+          <span class="tc-toggle">+</span>
+        </div>
+        <div class="tc-body">
+          <div class="tc-content">
+            <p>La <strong>comprobación de tipos</strong> (type checking) verifica que cada operación se aplique a operandos del tipo adecuado. Es una de las tareas más importantes del analizador semántico para garantizar la coherencia del programa.</p>
+            <h4>Tipos de verificación</h4>
+            <ul>
+              <li><strong>Estática:</strong> se realiza en tiempo de compilación (C, Java, Pascal)</li>
+              <li><strong>Dinámica:</strong> se realiza en tiempo de ejecución (Python, JS)</li>
+              <li><strong>Fuerte:</strong> no permite operaciones entre tipos incompatibles</li>
+              <li><strong>Débil:</strong> permite conversiones implícitas automáticas</li>
+            </ul>
+            <h4>Conversión de tipos (casting)</h4>
+            <ul>
+              <li><strong>Implícita (coerción):</strong> el compilador convierte automáticamente</li>
+              <li><strong>Explícita:</strong> el programador indica la conversión manualmente</li>
+            </ul>
+            <h4>Ejemplo — reglas de tipo</h4>
+            <div class="code-ex">int + int   → int      ✓
+int + float → float    ✓ (coerción)
+int + string→ ERROR    ✗ (tipo incompatible)
+char + int  → int      ✓ (coerción ASCII)</div>
+            <div class="tag-row">
+              <span class="tag m">type checking</span>
+              <span class="tag y">coerción</span>
+              <span class="tag">casting</span>
+              <span class="tag c">semántico</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1.4 -->
+      <div class="topic-card" id="u1-t14">
+        <div class="tc-head">
+          <span class="tc-num">1.4</span>
+          <div>
+            <div class="tc-title">Pila Semántica</div>
+            <div class="tc-sub">En un analizador sintáctico</div>
+          </div>
+          <span class="tc-toggle">+</span>
+        </div>
+        <div class="tc-body">
+          <div class="tc-content">
+            <p>La <strong>pila semántica</strong> es una estructura de datos paralela a la pila del analizador sintáctico. Almacena atributos y valores semánticos de los símbolos que están en la pila del parser, permitiendo que las acciones semánticas accedan a la información necesaria.</p>
+            <h4>Funcionamiento</h4>
+            <ul>
+              <li>Cada entrada en la pila del parser tiene una entrada en la pila semántica</li>
+              <li>Al hacer shift: se empuja el valor del token actual</li>
+              <li>Al hacer reduce: se extraen los valores de los hijos y se calcula el del padre</li>
+              <li>Es fundamental en parsers LALR(1) y SLR(1)</li>
+            </ul>
+            <h4>Ejemplo de ejecución — 3 + 5</h4>
+            <div class="code-ex">PILA SINTÁCTICA    PILA SEMÁNTICA   ENTRADA
+$                  $                3 + 5 $
+$ num              $ [3]            + 5 $
+$ E                $ [3]            + 5 $
+$ E +              $ [3,-]          5 $
+$ E + num          $ [3,-,5]        $
+$ E + T            $ [3,-,5]        $
+$ E                $ [8]            $  ← 3+5=8</div>
+            <div class="tag-row">
+              <span class="tag m">LALR</span>
+              <span class="tag m">SLR</span>
+              <span class="tag y">shift-reduce</span>
+              <span class="tag c">atributos</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1.5 -->
+      <div class="topic-card" id="u1-t15">
+        <div class="tc-head">
+          <span class="tc-num">1.5</span>
+          <div>
+            <div class="tc-title">Esquema de Traducción</div>
+            <div class="tc-sub">Reglas semánticas dirigidas por sintaxis</div>
+          </div>
+          <span class="tc-toggle">+</span>
+        </div>
+        <div class="tc-body">
+          <div class="tc-content">
+            <p>Un <strong>esquema de traducción</strong> (SDT - Syntax Directed Translation) es una gramática con acciones semánticas incrustadas en los cuerpos de las producciones. A diferencia de las SDD, indica el orden exacto en que deben ejecutarse las acciones.</p>
+            <h4>Diferencia SDD vs SDT</h4>
+            <ul>
+              <li><strong>SDD:</strong> especifica qué calcular, no cuándo</li>
+              <li><strong>SDT:</strong> especifica qué calcular y en qué momento exacto</li>
+              <li>Las acciones se incrustan entre los símbolos de la producción</li>
+            </ul>
+            <h4>Ejemplo — traducción a postfija</h4>
+            <div class="code-ex">E → E₁ '+' T  { print('+') }
+E → T
+T → T₁ '*' F  { print('*') }
+T → F
+F → '(' E ')'
+F → num        { print(num.val) }
+
+Entrada: 3 + 4 * 5
+Salida:  3 4 5 * +</div>
+            <h4>Tipos de SDT</h4>
+            <ul>
+              <li><strong>SDT con atrib. sintetizados:</strong> acciones al final de producción</li>
+              <li><strong>SDT con atrib. heredados:</strong> acciones en medio de la producción</li>
+            </ul>
+            <div class="tag-row">
+              <span class="tag m">SDT</span>
+              <span class="tag y">postfija</span>
+              <span class="tag c">traducción</span>
+              <span class="tag">gramática</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1.6 -->
+      <div class="topic-card" id="u1-t16">
+        <div class="tc-head">
+          <span class="tc-num">1.6</span>
+          <div>
+            <div class="tc-title">Tabla de Símbolos</div>
+            <div class="tc-sub">Y tabla de direcciones</div>
+          </div>
+          <span class="tc-toggle">+</span>
+        </div>
+        <div class="tc-body">
+          <div class="tc-content">
+            <p>La <strong>tabla de símbolos</strong> es una estructura de datos central en el compilador que almacena información sobre cada identificador declarado en el programa. Es utilizada por todas las fases del compilador.</p>
+            <h4>Información almacenada</h4>
+            <ul>
+              <li>Nombre del identificador (lexema)</li>
+              <li>Tipo de dato (int, float, string, etc.)</li>
+              <li>Dirección de memoria o número de registro</li>
+              <li>Ámbito (scope) y nivel de anidamiento</li>
+              <li>Número de parámetros (si es función)</li>
+            </ul>
+            <h4>Ejemplo — tabla de símbolos</h4>
+            <div class="code-ex">| Nombre | Tipo  | Dir  | Ámbito | Valor |
+|--------|-------|------|--------|-------|
+| x      | int   | 0x01 | global | 10    |
+| y      | float | 0x02 | local  | 3.14  |
+| suma   | func  | 0x10 | global | —     |</div>
+            <h4>Implementaciones comunes</h4>
+            <ul>
+              <li><strong>Tabla hash:</strong> acceso O(1) promedio</li>
+              <li><strong>Árbol BST:</strong> ordenado, acceso O(log n)</li>
+              <li><strong>Lista encadenada:</strong> simple pero O(n) búsqueda</li>
+            </ul>
+            <div class="tag-row">
+              <span class="tag m">hash table</span>
+              <span class="tag y">scope</span>
+              <span class="tag c">identificadores</span>
+              <span class="tag">memoria</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1.7 -->
+      <div class="topic-card" id="u1-t17">
+        <div class="tc-head">
+          <span class="tc-num">1.7</span>
+          <div>
+            <div class="tc-title">Errores Semánticos</div>
+            <div class="tc-sub">Detección y recuperación</div>
+          </div>
+          <span class="tc-toggle">+</span>
+        </div>
+        <div class="tc-body">
+          <div class="tc-content">
+            <p>Los <strong>errores semánticos</strong> ocurren cuando el código es sintácticamente correcto pero carece de sentido lógico. El compilador los detecta durante el análisis semántico al verificar restricciones que la gramática no puede capturar.</p>
+            <h4>Tipos de errores semánticos</h4>
+            <ul>
+              <li><strong>Variable no declarada:</strong> uso de identificador sin declarar</li>
+              <li><strong>Variable ya declarada:</strong> redeclaración en el mismo ámbito</li>
+              <li><strong>Incompatibilidad de tipos:</strong> int = string, por ejemplo</li>
+              <li><strong>Número incorrecto de argumentos:</strong> en llamada a función</li>
+              <li><strong>Uso fuera de ámbito:</strong> acceder a variable de otro scope</li>
+              <li><strong>Valor fuera de rango:</strong> overflow en asignación</li>
+            </ul>
+            <h4>Estrategias de recuperación</h4>
+            <ul>
+              <li><strong>Modo pánico:</strong> descarta tokens hasta símbolo de sincronización</li>
+              <li><strong>Corrección de errores:</strong> intenta continuar asumiendo tipo compatible</li>
+              <li><strong>Reporte múltiple:</strong> reporta todos los errores posibles antes de detener</li>
+            </ul>
+            <h4>Ejemplo</h4>
+            <div class="code-ex">int x = 5;
+float y = x + "hola";   // ERROR: tipo incompatible
+z = x + 1;              // ERROR: 'z' no declarada
+int x = 10;             // ERROR: redeclaración de 'x'</div>
+            <div class="tag-row">
+              <span class="tag m">errores</span>
+              <span class="tag y">recuperación</span>
+              <span class="tag c">scope</span>
+              <span class="tag">diagnóstico</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /topic-grid -->
+
+    <!-- EVIDENCIAS -->
+    <div>
+      <div class="sec-head">EVIDENCIAS <span class="sec-tag">// UNIDAD 1</span></div>
+    </div>
+    <div class="ev-grid">
+      <div class="ev-card">
+        <div class="ev-thumb"><img src="/img/evidencia-presentacion.jpg" alt="Presentación"></div>
+        <div class="ev-body">
+          <span class="ev-tag">// presentación</span>
+          <div class="ev-title">1.4 Pila Semántica en un Analizador Sintáctico</div>
+          <div class="ev-footer"><span>2026</span><span class="grade">—</span></div>
+        </div>
+      </div>
+      <div class="ev-card">
+        <div class="ev-thumb"><img src="/img/evidencia-investigacion.jpg" alt="Investigación"></div>
+        <div class="ev-body">
+          <span class="ev-tag">// investigación</span>
+          <div class="ev-title">Investigación — Análisis Semántico</div>
+          <div class="ev-footer"><span>2026</span><span class="grade">—</span></div>
+        </div>
+      </div>
+      <div class="ev-card">
+        <div class="ev-thumb"><img src="/img/blog.png" alt="Blog"></div>
+        <div class="ev-body">
+          <span class="ev-tag">// blog</span>
+          <div class="ev-title">Portafolio Digital — Evidencia de desarrollo web</div>
+          <div class="ev-footer"><span>2026</span><span class="grade">—</span></div>
+        </div>
+      </div>
+      <div class="ev-card">
+        <div class="ev-thumb"><div class="ev-add"><span>AGREGA TU FOTO</span><span class="plus">[ + ]</span><span>Pendiente</span></div></div>
+        <div class="ev-body">
+          <span class="ev-tag">// investigación</span>
+          <div class="ev-title">Investigación 2 — Temas 1.5 y 1.6</div>
+          <div class="ev-footer"><span>2026</span><span class="grade">—</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /view-u1 -->
+
+  <!-- ══════════════════════════════════
+       UNIDAD 2 — CÓDIGO INTERMEDIO
+  ══════════════════════════════════ -->
+  <div class="view" id="view-u2">
+
+    <div>
+      <div class="hero-title">CÓDIGO <span class="acc-y">INTERMEDIO</span></div>
+      <div class="hero-sub">// UNIDAD 2 — 12 SUBTEMAS — GENERACIÓN DE CÓDIGO INTERMEDIO</div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><span class="stat-n">12</span><span class="stat-l">subtemas</span></div>
+      <div class="stat"><span class="stat-n">0</span><span class="stat-l">evidencias</span></div>
+      <div class="stat"><span class="stat-n">En curso</span><span class="stat-l">estado</span></div>
+      <div class="stat">
+        <div class="prog-row"><span>// AVANCE UNIDAD 2</span><span>20%</span></div>
+        <div class="prog-bar"><div class="prog-fill" style="width:20%"></div></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="sec-head">TEMAS <span class="sec-tag">// DA CLIC PARA EXPANDIR</span></div>
+    </div>
+
+    <div class="topic-grid">
+
+      <!-- 2.1 Notaciones -->
+      <div class="topic-card" id="u2-t21">
+        <div class="tc-head">
+          <span class="tc-num">2.1</span>
+          <div>
+            <div class="tc-title">Notaciones</div>
+            <div class="tc-sub">Prefija, Infija, Postfija</div>
+          </div>
+          <span class="tc-toggle">+</span>
+        </div>
+        <div class="tc-body">
+          <div class="tc-content">
+            <p>Las <strong>notaciones</strong> son formas distintas de escribir expresiones matemáticas y lógicas según la posición del operador respecto a sus operandos. Son fundamentales para la generación de código intermedio.</p>
+            <h4>Notación Infija (2.1.2)</h4>
+            <ul>
+              <li>Es la notación habitual: operador entre operandos</li>
+              <li>Requiere paréntesis para indicar precedencia</li>
+              <li>Ejemplo: <code>A + B * C</code></li>
+            </ul>
+            <h4>Notación Prefija / Polaca (2.1.1)</h4>
+            <ul>
+              <li>El operador aparece ANTES que los operandos</li>
+              <li>No requiere paréntesis, la precedencia es implícita</li>
+              <li>Ejemplo: <code>+ A * B C</code>  (A + B*C)</li>
+            </ul>
+            <h4>Notación Postfija / Polaca Inversa (2.2.3)</h4>
+            <ul>
+              <li>El operador aparece DESPUÉS de los operandos</li>
+              <li>Ideal para evaluación con pilas (máquinas de pila)</li>
+              <li>Ejemplo: <code>A B C * +</code>  (A + B*C)</li>
+            </ul>
+            <h4>Tabla comparativa</h4>
+            <div class="code-ex">Expresión: (A + B) * (C - D)
+Infija:    (A + B) * (C - D)
+Prefija:   * + A B - C D
+Postfija:  A B + C D - *</div>
+            <div class="tag-row">
+              <span class="tag m">infija</span>
+              <span class="tag m">prefija</span>
+              <span class="tag y">postfija</span>
+              <span class="tag c">Polaca Inversa</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2.2 Representaciones -->
+      <div class="topic-card" id="u2-t22">
+        <div class="tc-head">
+          <span class="tc-num">2.2</span>
+          <div>
+            <div class="tc-title">Representaciones de Código Intermedio</div>
+            <div class="tc-sub">Polaca, P, Triples, Cuádruplos</div>
+          </div>
+          <span class="tc-toggle">+</span>
+        </div>
+        <div class="tc-body">
+          <div class="tc-content">
+            <p>Las <strong>representaciones de código intermedio</strong> son estructuras que sirven como puente entre el código fuente de alto nivel y el código máquina final. Independizan el compilador de la arquitectura de la máquina destino.</p>
+            <h4>2.2.1 Notación Polaca (RPN)</h4>
+            <ul>
+              <li>Evaluación izquierda a derecha con una pila</li>
+              <li>Sin necesidad de paréntesis ni precedencia</li>
+            </ul>
+            <div class="code-ex">Expresión: a = b + c * d
+Polaca:    b c d * + a =</div>
+            <h4>2.2.2 Código P (P-Code)</h4>
+            <ul>
+              <li>Lenguaje intermedio independiente de la máquina</li>
+              <li>Diseñado para ejecutarse en una máquina virtual de pila</li>
+              <li>Usado originalmente en el compilador Pascal</li>
+            </ul>
+            <div class="code-ex">a := b + c * d
+→  LOAD b
+   LOAD c
+   LOAD d
+   MUL
+   ADD
+   STORE a</div>
+            <h4>2.2.3 Triples</h4>
+            <ul>
+              <li>Cada instrucción tiene 3 campos: (op, arg1, arg2)</li>
+              <li>El resultado se referencia por número de instrucción</li>
+              <li>No usa variables temporales explícitas</li>
+            </ul>
+            <div class="code-ex">  # | op  | arg1 | arg2
+  0 | *   | c    | d
+  1 | +   | b    | (0)
+  2 | :=  | a    | (1)</div>
+            <h4>2.2.4 Cuádruplos</h4>
+            <ul>
+              <li>Cada instrucción tiene 4 campos: (op, arg1, arg2, resultado)</li>
+              <li>Usa variables temporales explícitas (t1, t2...)</li>
+              <li>Más flexible, permite reordenar instrucciones</li>
+            </ul>
+            <div class="code-ex">  # | op  | arg1 | arg2 | result
+  0 | *   | c    | d    | t1
+  1 | +   | b    | t1   | t2
+  2 | :=  | t2   |      | a</div>
+            <div class="tag-row">
+              <span class="tag m">cuádruplos</span>
+              <span class="tag m">triples</span>
+              <span class="tag y">código-P</span>
+              <span class="tag c">temporales</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2.3 Esquema de generación -->
+      <div class="topic-card" id="u2-t23">
+        <div class="tc-head">
+          <span class="tc-num">2.3</span>
+          <div>
+            <div class="tc-title">Esquema de Generación</div>
+            <div class="tc-sub">Variables, expresiones, control, funciones</div>
+          </div>
+          <span class="tc-toggle">+</span>
+        </div>
+        <div class="tc-body">
+          <div class="tc-content">
+            <p>El <strong>esquema de generación</strong> define cómo se traduce cada estructura del lenguaje fuente a código intermedio. Cubre desde variables simples hasta estructuras complejas como funciones y arreglos.</p>
+            <h4>2.3.1 Variables y constantes</h4>
+            <ul>
+              <li>Las variables generan instrucciones LOAD/STORE</li>
+              <li>Las constantes se usan directamente como operandos</li>
+            </ul>
+            <h4>2.3.2 Expresiones</h4>
+            <ul>
+              <li>Se generan en orden post-fijo recorriendo el AST</li>
+              <li>Se crean variables temporales para resultados intermedios</li>
+            </ul>
+            <h4>2.3.3 Instrucción de asignación</h4>
+            <div class="code-ex">Fuente:     x = a + b * c
+Cuádruplos: t1 = b * c
+            t2 = a + t1
+            x  = t2</div>
+            <h4>2.3.4 Instrucciones de control</h4>
+            <div class="code-ex">if (a < b) goto L1
+// código else
+goto L2
+L1: // código if
+L2: // continúa</div>
+            <h4>2.3.5 Funciones</h4>
+            <ul>
+              <li>Instrucciones PARAM para pasar argumentos</li>
+              <li>Instrucción CALL con nombre y número de args</li>
+              <li>Instrucción RETURN para devolver valor</li>
+            </ul>
+            <h4>2.3.6 Estructuras (structs / arrays)</h4>
+            <ul>
+              <li>Acceso por desplazamiento (offset) desde dirección base</li>
+              <li>Fórmula array: base + i * tamaño_elemento</li>
+            </ul>
+            <div class="tag-row">
+              <span class="tag m">goto</span>
+              <span class="tag m">PARAM</span>
+              <span class="tag y">CALL</span>
+              <span class="tag c">offset</span>
+              <span class="tag">temporales</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /topic-grid u2 -->
+  </div><!-- /view-u2 -->
+
+  <!-- ══════════════════════════════════
+       UNIDAD 3 — OPTIMIZACIÓN
+  ══════════════════════════════════ -->
+  <div class="view" id="view-u3">
+
+    <div>
+      <div class="hero-title">OPTIMI<span class="acc-m">ZACIÓN</span></div>
+      <div class="hero-sub">// UNIDAD 3 — OPTIMIZACIÓN DE CÓDIGO INTERMEDIO Y OBJETO</div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><span class="stat-n">6</span><span class="stat-l">subtemas</span></div>
+      <div class="stat"><span class="stat-n">0</span><span class="stat-l">evidencias</span></div>
+      <div class="stat"><span class="stat-n">Próximo</span><span class="stat-l">estado</span></div>
+      <div class="stat">
+        <div class="prog-row"><span>// AVANCE UNIDAD 3</span><span>0%</span></div>
+        <div class="prog-bar"><div class="prog-fill" style="width:0%"></div></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="sec-head">TEMAS <span class="sec-tag">// DA CLIC PARA EXPANDIR</span></div>
+    </div>
+
+    <div class="topic-grid">
+
+      <!-- 3.1 Tipos de optimización -->
+      <div class="topic-card" id="u3-t31">
+        <div class="tc-head">
+          <span class="tc-num">3.1</span>
+          <div>
+            <div class="tc-title">Tipos de Optimización</div>
+            <div class="tc-sub">Local, ciclos, global, mirilla</div>
+          </div>
+          <span class="tc-toggle">+</span>
+        </div>
+        <div class="tc-body">
+          <div class="tc-content">
+            <p>La <strong>optimización de código</strong> es el proceso de transformar el código intermedio para que sea más eficiente en términos de tiempo de ejecución y/o uso de memoria, sin alterar el resultado del programa.</p>
+            <h4>3.1.1 Optimización Local (de bloque básico)</h4>
+            <ul>
+              <li>Actúa dentro de un solo bloque básico (secuencia lineal sin saltos)</li>
+              <li><strong>Eliminación de subexpresiones comunes:</strong> no recalcular lo ya calculado</li>
+              <li><strong>Propagación de constantes:</strong> sustituir variables con valores conocidos</li>
+              <li><strong>Plegado de constantes:</strong> evaluar expresiones constantes en compilación</li>
+            </ul>
+            <div class="code-ex">// Antes:
+t1 = a * b
+t2 = a * b   // subexpresión repetida
+t3 = t1 + t2
+
+// Después (optimizado):
+t1 = a * b
+t3 = t1 + t1  // reutiliza t1</div>
+            <h4>3.1.2 Optimización de Ciclos</h4>
+            <ul>
+              <li><strong>Movimiento de código invariante:</strong> sacar del ciclo lo que no cambia</li>
+              <li><strong>Reducción de fuerza:</strong> reemplazar operaciones costosas (x²→x+x)</li>
+              <li><strong>Eliminación de variables de inducción:</strong> simplificar contadores</li>
+              <li><strong>Desenrollado de ciclos:</strong> expandir el cuerpo para reducir saltos</li>
+            </ul>
+            <div class="code-ex">// Antes — código invariante dentro del ciclo:
+for i = 1 to n:
+    x = a * b   // a y b no cambian en el ciclo!
+    arr[i] = x + i
+
+// Después — movimiento de código:
+x = a * b       // fuera del ciclo
+for i = 1 to n:
+    arr[i] = x + i</div>
+            <h4>3.1.3 Optimización Global</h4>
+            <ul>
+              <li>Actúa sobre el flujo completo del programa</li>
+              <li>Requiere análisis de flujo de datos entre bloques</li>
+              <li><strong>Propagación global de constantes</strong> entre bloques</li>
+              <li><strong>Eliminación de código muerto</strong> (dead code elimination)</li>
+            </ul>
+            <h4>3.1.4 Optimización de Mirilla (Peephole)</h4>
+            <ul>
+              <li>Examina una ventana pequeña de instrucciones a la vez</li>
+              <li>Reemplaza secuencias ineficientes por equivalentes mejores</li>
+              <li><strong>Eliminación de saltos redundantes</strong></li>
+              <li><strong>Simplificación algebraica:</strong> x + 0 → x, x * 1 → x</li>
+              <li><strong>Instrucciones de máquina específicas</strong> más eficientes</li>
+            </ul>
+            <div class="code-ex">// Mirilla — elimina salto redundante:
+Antes:  JUMP L1
+        L1: ...
+Después: ...  (elimina el JUMP innecesario)
+
+// Mirilla — simplificación algebraica:
+Antes:  t1 = x * 2
+Después: t1 = x + x  (o usa shift: x << 1)</div>
+            <div class="tag-row">
+              <span class="tag m">bloques básicos</span>
+              <span class="tag m">dead code</span>
+              <span class="tag y">ciclos</span>
+              <span class="tag c">peephole</span>
+              <span class="tag">flujo de datos</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3.2 Costos -->
+      <div class="topic-card" id="u3-t32">
+        <div class="tc-head">
+          <span class="tc-num">3.2</span>
+          <div>
+            <div class="tc-title">Costos de Optimización</div>
+            <div class="tc-sub">Ejecución, criterios, herramientas</div>
+          </div>
+          <span class="tc-toggle">+</span>
+        </div>
+        <div class="tc-body">
+          <div class="tc-content">
+            <p>Los <strong>costos</strong> en optimización se refieren al tiempo, espacio y recursos que consume cada instrucción del código intermedio y generado. El objetivo es minimizarlos sin cambiar el resultado del programa.</p>
+            <h4>3.2.1 Costo de ejecución</h4>
+            <ul>
+              <li><strong>Memoria:</strong> cuánta RAM consume el programa y sus estructuras</li>
+              <li><strong>Registros:</strong> uso eficiente de registros del procesador (acceso más rápido)</li>
+              <li><strong>Pilas:</strong> profundidad y operaciones en la pila de llamadas</li>
+              <li>Las instrucciones con operandos en registros son más baratas que en memoria</li>
+            </ul>
+            <h4>3.2.2 Criterios para mejorar el código</h4>
+            <ul>
+              <li><strong>Tiempo de ejecución:</strong> minimizar ciclos de reloj consumidos</li>
+              <li><strong>Tamaño del código:</strong> reducir número de instrucciones generadas</li>
+              <li><strong>Uso de registros:</strong> maximizar reutilización, minimizar accesos a memoria</li>
+              <li><strong>Localidad de referencia:</strong> mejorar caché hits</li>
+              <li>Hay un trade-off: código más rápido puede ser más grande (y viceversa)</li>
+            </ul>
+            <h4>3.2.3 Herramientas para análisis de flujo de datos</h4>
+            <ul>
+              <li><strong>Grafos de flujo de control (CFG):</strong> representan rutas de ejecución</li>
+              <li><strong>Análisis de alcance de definiciones:</strong> qué definiciones llegan a qué puntos</li>
+              <li><strong>Análisis de variables vivas:</strong> qué variables se usan después de un punto</li>
+              <li><strong>Análisis de disponibilidad:</strong> expresiones ya calculadas que están disponibles</li>
+            </ul>
+            <div class="code-ex">// Análisis de variables vivas:
+// Si 'x' no se usa después de este punto → 'x' está muerta
+// Podemos eliminar la asignación a 'x'
+
+t1 = a + b
+x  = t1 * 2   // ← si 'x' no se usa más → código muerto
+y  = t1 + 5   // solo 'y' se necesita</div>
+            <div class="tag-row">
+              <span class="tag m">CFG</span>
+              <span class="tag m">variables vivas</span>
+              <span class="tag y">registros</span>
+              <span class="tag c">flujo de datos</span>
+              <span class="tag">trade-off</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /topic-grid u3 -->
+  </div><!-- /view-u3 -->
+
+  <!-- ══════════════════════════════════
+       UNIDAD 4 — PRÓXIMAMENTE
+  ══════════════════════════════════ -->
+  <div class="view" id="view-u4">
+    <div class="soon">
+      <div class="soon-t">UNIDAD 4</div>
+      <p class="soon-s">¿Apoco sí llegaste a la cuarta unidad? Generación de código objeto — registros, ensamblador, lenguaje máquina, administración de memoria. Próximamente.</p>
+      <div class="soon-badge">PRÓXIMAMENTE</div>
+      <div class="dots">
+        <div class="dot-a"></div>
+        <div class="dot-a"></div>
+        <div class="dot-a"></div>
+      </div>
+    </div>
+  </div>
+
+</main>
+</div>
+
+<script>
+/* ── NAVEGACIÓN ENTRE VISTAS ── */
+const navBtns = document.querySelectorAll('.nav-btn[data-view]');
+
+navBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    navBtns.forEach(b => {
+      b.classList.remove('active');
+      b.querySelector('.nav-arrow').textContent = '';
+    });
+    btn.classList.add('active');
+    btn.querySelector('.nav-arrow').textContent = '›';
+
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    const target = document.getElementById('view-' + btn.dataset.view);
+    if (target) target.classList.add('active');
+  });
+});
+
+/* ── NAVEGACIÓN A SUBTEMA (desde sidebar) ── */
+document.querySelectorAll('.sub-btn[data-goto]').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const id = btn.dataset.goto;
+    const unit = id.split('-')[0];
+
+    // Activa la unidad correcta
+    navBtns.forEach(b => {
+      b.classList.remove('active');
+      b.querySelector('.nav-arrow').textContent = '';
+    });
+    const unitBtn = document.querySelector(`.nav-btn[data-view="${unit}"]`);
+    if (unitBtn) {
+      unitBtn.classList.add('active');
+      unitBtn.querySelector('.nav-arrow').textContent = '›';
+    }
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    const view = document.getElementById('view-' + unit);
+    if (view) view.classList.add('active');
+
+    // Abre la tarjeta del tema
+    setTimeout(() => {
+      const card = document.getElementById(id);
+      if (card) {
+        card.classList.add('open');
+        card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 80);
+  });
+});
+
+/* ── EXPANDIR / COLAPSAR TARJETAS DE TEMA ── */
+document.querySelectorAll('.topic-card').forEach(card => {
+  const head = card.querySelector('.tc-head');
+  head.addEventListener('click', () => {
+    card.classList.toggle('open');
+  });
+});
+</script>
+</body>
+</html>
