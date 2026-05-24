@@ -201,9 +201,24 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
         <div class="nav-arrow"></div>
         UNIDAD 4
       </button>
+      <div class="nav-sub" id="sub4">
+        <button class="sub-btn" data-goto="u4-t41">4.1 Registros</button>
+        <button class="sub-btn" data-goto="u4-t42">4.2 Ensamblador</button>
+        <button class="sub-btn" data-goto="u4-t43">4.3 Lenguaje máquina</button>
+        <button class="sub-btn" data-goto="u4-t44">4.4 Adm. de memoria</button>
+      </div>
     </nav>
   </div>
+
+  <div style="margin-top:auto;padding-top:20px;border-top:1px solid #222;">
+    <div class="nav-label">// EXTRAS</div>
+    <button class="nav-btn" data-view="dayapardy" style="color:var(--yellow);border-left-color:transparent;">
+      <div class="nav-arrow" style="color:var(--yellow);">★</div>
+      DAYAPARDY
+    </button>
+  </div>
 </aside>
+
 
 <!-- ══ MAIN ══ -->
 <main class="main">
@@ -939,20 +954,328 @@ y  = t1 + 5   // solo 'y' se necesita</div>
   </div><!-- /view-u3 -->
 
   <!-- ══════════════════════════════════
-       UNIDAD 4 — PRÓXIMAMENTE
+       UNIDAD 4 — GENERACIÓN DE CÓDIGO OBJETO
   ══════════════════════════════════ -->
   <div class="view" id="view-u4">
-    <div class="soon">
-      <div class="soon-t">UNIDAD 4</div>
-      <p class="soon-s">¿Apoco sí llegaste a la cuarta unidad? Generación de código objeto — registros, ensamblador, lenguaje máquina, administración de memoria. Próximamente.</p>
-      <div class="soon-badge">PRÓXIMAMENTE</div>
-      <div class="dots">
-        <div class="dot-a"></div>
-        <div class="dot-a"></div>
-        <div class="dot-a"></div>
+
+    <div>
+      <div class="hero-title">CÓDIGO <span class="acc-y">OBJETO</span></div>
+      <div class="hero-sub">// UNIDAD 4 — 4 TEMAS — GENERACIÓN DE CÓDIGO OBJETO Y LENGUAJE MÁQUINA</div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><span class="stat-n">4</span><span class="stat-l">temas</span></div>
+      <div class="stat"><span class="stat-n">0</span><span class="stat-l">evidencias</span></div>
+      <div class="stat"><span class="stat-n">Próximo</span><span class="stat-l">estado</span></div>
+      <div class="stat">
+        <div class="prog-row"><span>// AVANCE UNIDAD 4</span><span>0%</span></div>
+        <div class="prog-bar"><div class="prog-fill" style="width:0%"></div></div>
       </div>
     </div>
-  </div>
+
+    <div>
+      <div class="sec-head">TEMAS <span class="sec-tag">// DA CLIC PARA EXPANDIR</span></div>
+    </div>
+
+    <div class="topic-grid">
+
+      <!-- 4.1 Registros -->
+      <div class="topic-card" id="u4-t41">
+        <div class="tc-head">
+          <span class="tc-num">4.1</span>
+          <div>
+            <div class="tc-title">Registros</div>
+            <div class="tc-sub">Asignación y uso de registros del procesador</div>
+          </div>
+          <span class="tc-toggle">+</span>
+        </div>
+        <div class="tc-body">
+          <div class="tc-content">
+            <p>Los <strong>registros</strong> son la unidad de almacenamiento más rápida del procesador. La asignación eficiente de registros es uno de los problemas más críticos en la generación de código objeto, ya que minimizar los accesos a memoria mejora dramáticamente el rendimiento.</p>
+            <h4>¿Por qué importan los registros?</h4>
+            <ul>
+              <li>Son 10–100× más rápidos que acceder a memoria RAM</li>
+              <li>El número de registros es limitado (8–32 en arquitecturas comunes)</li>
+              <li>Si no alcanza un registro → se hace un <strong>spill</strong> (guardar en memoria)</li>
+              <li>Cada spill añade instrucciones LOAD/STORE innecesarias</li>
+            </ul>
+            <h4>Registros en arquitectura x86/x86-64</h4>
+            <div class="code-ex">; Registros de propósito general (64-bit):
+RAX  — acumulador, retorno de funciones
+RBX  — base, preservado entre llamadas
+RCX  — contador (ciclos, operaciones de cadena)
+RDX  — datos, multiplicación/división
+RSI  — índice fuente (source index)
+RDI  — índice destino (destination index)
+RSP  — puntero de pila (stack pointer)
+RBP  — puntero base del marco (frame pointer)
+R8–R15 — registros adicionales (solo 64-bit)</div>
+            <h4>Estrategias de asignación de registros</h4>
+            <ul>
+              <li><strong>Asignación global:</strong> análisis de todo el flujo del programa (costosa pero óptima)</li>
+              <li><strong>Asignación local:</strong> solo dentro de un bloque básico (rápida, menos óptima)</li>
+              <li><strong>Coloración de grafos:</strong> modela conflictos entre variables como un grafo y lo colorea con k colores (k = número de registros)</li>
+              <li><strong>Heurística LRFU:</strong> descarta el registro usado menos recientemente</li>
+            </ul>
+            <h4>Ejemplo — coloración de grafos</h4>
+            <div class="code-ex">Variables vivas al mismo tiempo → no pueden compartir registro
+
+  a ─── b          Si hay 2 registros (R1, R2):
+  │     │          a → R1
+  └─ c ─┘          b → R2
+                   c → R1 (a ya terminó) ✓</div>
+            <div class="tag-row">
+              <span class="tag m">x86</span>
+              <span class="tag m">RAX/RBX</span>
+              <span class="tag y">spill</span>
+              <span class="tag c">coloración de grafos</span>
+              <span class="tag">variables vivas</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4.2 Lenguaje Ensamblador -->
+      <div class="topic-card" id="u4-t42">
+        <div class="tc-head">
+          <span class="tc-num">4.2</span>
+          <div>
+            <div class="tc-title">Lenguaje Ensamblador</div>
+            <div class="tc-sub">Instrucciones, modos de direccionamiento, traducción</div>
+          </div>
+          <span class="tc-toggle">+</span>
+        </div>
+        <div class="tc-body">
+          <div class="tc-content">
+            <p>El <strong>lenguaje ensamblador</strong> (Assembly) es una representación simbólica del lenguaje máquina. Cada instrucción en ensamblador corresponde directamente a una instrucción de la CPU. El compilador genera ensamblador como paso previo al código binario final.</p>
+            <h4>Estructura de una instrucción</h4>
+            <div class="code-ex">[etiqueta:]  mnemónico  [operando1, operando2]  [; comentario]
+
+Ejemplo:
+inicio:  MOV  EAX, 5      ; EAX = 5
+         ADD  EAX, EBX    ; EAX = EAX + EBX
+         JMP  inicio      ; salta a etiqueta</div>
+            <h4>Modos de direccionamiento</h4>
+            <ul>
+              <li><strong>Inmediato:</strong> el operando es un valor constante — <code>MOV EAX, 10</code></li>
+              <li><strong>Registro:</strong> el operando está en un registro — <code>MOV EAX, EBX</code></li>
+              <li><strong>Directo:</strong> el operando es una dirección de memoria — <code>MOV EAX, [0x1000]</code></li>
+              <li><strong>Indirecto por registro:</strong> la dirección está en un registro — <code>MOV EAX, [EBX]</code></li>
+              <li><strong>Indexado:</strong> base + desplazamiento — <code>MOV EAX, [EBX+4]</code></li>
+            </ul>
+            <h4>Traducción de código intermedio a ensamblador</h4>
+            <div class="code-ex">; Código intermedio:      ; Ensamblador x86:
+t1 = b * c           →   MOV  EAX, [b]
+                          MUL  [c]          ; EAX = b * c
+                          MOV  [t1], EAX
+
+t2 = a + t1          →   MOV  EBX, [a]
+                          ADD  EBX, [t1]    ; EBX = a + t1
+                          MOV  [t2], EBX
+
+x = t2               →   MOV  EAX, [t2]
+                          MOV  [x], EAX</div>
+            <h4>Instrucciones comunes x86</h4>
+            <ul>
+              <li><strong>MOV:</strong> mover/copiar datos entre registros o memoria</li>
+              <li><strong>ADD / SUB / MUL / DIV:</strong> operaciones aritméticas</li>
+              <li><strong>CMP:</strong> comparar dos valores (afecta flags)</li>
+              <li><strong>JMP / JE / JNE / JL / JG:</strong> saltos condicionales e incondicionales</li>
+              <li><strong>PUSH / POP:</strong> operaciones en la pila</li>
+              <li><strong>CALL / RET:</strong> llamada y retorno de subrutinas</li>
+            </ul>
+            <div class="tag-row">
+              <span class="tag m">MOV</span>
+              <span class="tag m">JMP</span>
+              <span class="tag y">CALL/RET</span>
+              <span class="tag c">mnemónicos</span>
+              <span class="tag">direccionamiento</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4.3 Lenguaje Máquina -->
+      <div class="topic-card" id="u4-t43">
+        <div class="tc-head">
+          <span class="tc-num">4.3</span>
+          <div>
+            <div class="tc-title">Lenguaje Máquina</div>
+            <div class="tc-sub">Formato binario, codificación de instrucciones</div>
+          </div>
+          <span class="tc-toggle">+</span>
+        </div>
+        <div class="tc-body">
+          <div class="tc-content">
+            <p>El <strong>lenguaje máquina</strong> es la representación binaria final que ejecuta directamente el hardware. Es el último paso del proceso de compilación. El ensamblador traduce los mnemónicos a este formato binario mediante un proceso llamado <em>ensamblado</em>.</p>
+            <h4>Formato de instrucción</h4>
+            <ul>
+              <li><strong>Opcode (código de operación):</strong> identifica qué instrucción es (ADD, MOV, JMP…)</li>
+              <li><strong>Operandos:</strong> registros, direcciones o valores inmediatos</li>
+              <li><strong>Modo de direccionamiento:</strong> indica cómo interpretar los operandos</li>
+              <li>En x86 las instrucciones tienen longitud variable (1 a 15 bytes)</li>
+            </ul>
+            <h4>Ejemplo — codificación binaria</h4>
+            <div class="code-ex">Ensamblador:       MOV  EAX, 5
+
+Hexadecimal:       B8 05 00 00 00
+
+Binario:
+B8       = 1011 1000  → opcode MOV EAX, imm32
+05000000 = 00000000 00000000 00000000 00000101 → valor 5
+
+; Otro ejemplo:
+ADD  EAX, EBX   → 01 D8
+CMP  EAX, 0     → 83 F8 00
+JE   etiqueta   → 74 XX  (XX = desplazamiento relativo)</div>
+            <h4>Proceso completo: fuente → máquina</h4>
+            <div class="code-ex">Código fuente (C/Pascal):
+  x = a + b * c
+
+       ↓ Análisis léxico, sintáctico, semántico
+
+Código intermedio (cuádruplos):
+  t1 = b * c
+  x  = a + t1
+
+       ↓ Generación de código objeto
+
+Ensamblador:
+  MOV EAX, [b]
+  MUL [c]
+  ADD EAX, [a]
+  MOV [x], EAX
+
+       ↓ Ensamblado
+
+Lenguaje máquina (hex):
+  8B 05 .. .. .. ..
+  F7 25 .. .. .. ..
+  03 05 .. .. .. ..</div>
+            <h4>Tipos de código objeto</h4>
+            <ul>
+              <li><strong>Código reubicable:</strong> direcciones relativas, el linker las ajusta</li>
+              <li><strong>Código absoluto:</strong> direcciones fijas, listo para ejecutar</li>
+              <li><strong>Código compartido (shared libs):</strong> reutilizable por varios programas</li>
+            </ul>
+            <div class="tag-row">
+              <span class="tag m">opcode</span>
+              <span class="tag m">binario</span>
+              <span class="tag y">hex</span>
+              <span class="tag c">linker</span>
+              <span class="tag">reubicable</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4.4 Administración de Memoria -->
+      <div class="topic-card" id="u4-t44">
+        <div class="tc-head">
+          <span class="tc-num">4.4</span>
+          <div>
+            <div class="tc-title">Administración de Memoria</div>
+            <div class="tc-sub">Pila, heap, segmentos, marcos de activación</div>
+          </div>
+          <span class="tc-toggle">+</span>
+        </div>
+        <div class="tc-body">
+          <div class="tc-content">
+            <p>La <strong>administración de memoria</strong> define cómo el compilador organiza el uso de la memoria en tiempo de ejecución. Es crítico para el correcto funcionamiento de variables locales, parámetros, valores de retorno y objetos dinámicos.</p>
+            <h4>Segmentos de memoria de un programa</h4>
+            <div class="code-ex">┌─────────────────────┐  ← dirección alta
+│   STACK (pila)      │  variables locales, retornos
+│         ↓           │  crece hacia abajo
+├─────────────────────┤
+│                     │  espacio libre
+├─────────────────────┤
+│   HEAP (montículo)  │  memoria dinámica (malloc/new)
+│         ↑           │  crece hacia arriba
+├─────────────────────┤
+│   BSS               │  variables globales no inicializadas
+├─────────────────────┤
+│   DATA              │  variables globales inicializadas
+├─────────────────────┤
+│   TEXT (código)     │  instrucciones del programa
+└─────────────────────┘  ← dirección baja (0x0000...)</div>
+            <h4>Marco de activación (Activation Record / Stack Frame)</h4>
+            <p>Cada llamada a función crea un <strong>marco de activación</strong> en la pila. Contiene toda la información necesaria para ejecutar y retornar de la función.</p>
+            <div class="code-ex">┌──────────────────────────┐
+│ Parámetros de entrada    │ ← pasados por el llamador
+├──────────────────────────┤
+│ Dirección de retorno     │ ← a dónde volver al terminar
+├──────────────────────────┤
+│ RBP anterior (saved EBP) │ ← enlace dinámico
+├──────────────────────────┤
+│ Variables locales        │ ← espacio para vars de la función
+├──────────────────────────┤
+│ Temporales               │ ← resultados intermedios
+└──────────────────────────┘ ← RSP (tope de pila actual)</div>
+            <h4>Estrategias de asignación</h4>
+            <ul>
+              <li><strong>Estática:</strong> tamaño fijo en compilación — variables globales, constantes</li>
+              <li><strong>Dinámica en pila:</strong> al llamar funciones — variables locales, parámetros</li>
+              <li><strong>Dinámica en heap:</strong> malloc/new en tiempo de ejecución — objetos, arreglos dinámicos</li>
+            </ul>
+            <h4>Convenciones de llamada (Calling Conventions)</h4>
+            <ul>
+              <li><strong>cdecl:</strong> argumentos en pila de derecha a izquierda, caller limpia</li>
+              <li><strong>stdcall:</strong> igual pero callee limpia la pila (WinAPI)</li>
+              <li><strong>fastcall:</strong> primeros argumentos en registros (ECX, EDX)</li>
+              <li><strong>System V AMD64 ABI:</strong> Linux x86-64 — primeros 6 args en RDI, RSI, RDX, RCX, R8, R9</li>
+            </ul>
+            <div class="tag-row">
+              <span class="tag m">stack frame</span>
+              <span class="tag m">heap</span>
+              <span class="tag y">malloc</span>
+              <span class="tag c">cdecl</span>
+              <span class="tag c">ABI</span>
+              <span class="tag">RSP/RBP</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /topic-grid u4 -->
+  </div><!-- /view-u4 -->
+
+  <!-- ══════════════════════════════════
+       DAYAPARDY
+  ══════════════════════════════════ -->
+  <div class="view" id="view-dayapardy">
+
+    <div>
+      <div class="hero-title">DAYA<span class="acc-y">PARDY</span></div>
+      <div class="hero-sub">// JUEGO INTERACTIVO — LENGUAJES Y AUTÓMATAS II — PONLE A VER CUÁNTO SABES</div>
+    </div>
+
+    <div style="display:flex;gap:16px;flex-wrap:wrap;">
+      <div style="background:var(--gray);border:1px solid #2a2a2a;border-left:4px solid var(--yellow);padding:16px 20px;flex:1;min-width:200px;">
+        <div style="font-family:var(--fm);font-size:9px;color:var(--yellow);letter-spacing:2px;margin-bottom:4px;">// CATEGORÍAS</div>
+        <div style="font-family:var(--font-d);font-size:22px;letter-spacing:1px;">5 TEMAS DEL TEMARIO</div>
+      </div>
+      <div style="background:var(--gray);border:1px solid #2a2a2a;border-left:4px solid var(--magenta);padding:16px 20px;flex:1;min-width:200px;">
+        <div style="font-family:var(--fm);font-size:9px;color:var(--magenta);letter-spacing:2px;margin-bottom:4px;">// PREGUNTAS</div>
+        <div style="font-family:var(--font-d);font-size:22px;letter-spacing:1px;">25 REACTIVOS</div>
+      </div>
+      <div style="background:var(--gray);border:1px solid #2a2a2a;border-left:4px solid var(--cyan);padding:16px 20px;flex:1;min-width:200px;">
+        <div style="font-family:var(--fm);font-size:9px;color:var(--cyan);letter-spacing:2px;margin-bottom:4px;">// MECÁNICA</div>
+        <div style="font-family:var(--font-d);font-size:22px;letter-spacing:1px;">3 VIDAS + RACHA</div>
+      </div>
+    </div>
+
+    <div style="border:2px solid var(--yellow);overflow:hidden;position:relative;">
+      <div style="background:var(--yellow);padding:6px 16px;font-family:var(--fm);font-size:9px;color:#000;letter-spacing:2px;">
+        // DAYAPARDY — JEOPARDY INTERACTIVO
+      </div>
+      <iframe
+        src="jeopardy-lya2.html"
+        style="width:100%;height:82vh;border:none;display:block;background:#080808;"
+        title="DayaPardy — Jeopardy de Lenguajes y Autómatas II"
+      ></iframe>
+    </div>
+
+  </div><!-- /view-dayapardy -->
 
 </main>
 </div>
@@ -965,10 +1288,12 @@ navBtns.forEach(btn => {
   btn.addEventListener('click', () => {
     navBtns.forEach(b => {
       b.classList.remove('active');
-      b.querySelector('.nav-arrow').textContent = '';
+      const arrow = b.querySelector('.nav-arrow');
+      if (arrow && b.dataset.view !== 'dayapardy') arrow.textContent = '';
     });
     btn.classList.add('active');
-    btn.querySelector('.nav-arrow').textContent = '›';
+    const arrow = btn.querySelector('.nav-arrow');
+    if (arrow && btn.dataset.view !== 'dayapardy') arrow.textContent = '›';
 
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     const target = document.getElementById('view-' + btn.dataset.view);

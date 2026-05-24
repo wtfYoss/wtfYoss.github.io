@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JEOPARDY // LENGUAJES Y AUTÓMATAS II</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Barlow+Condensed:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black: #080808;
+  --bg: #0d0d0d;
+  --gray: #141414;
+  --gray2: #1e1e1e;
+  --gray3: #2a2a2a;
+  --magenta: #FF0076;
+  --yellow: #F5E500;
+  --cyan: #00F0FF;
+  --white: #F0EDE6;
+  --fd: 'Bebas Neue', sans-serif;
+  --fb: 'Barlow Condensed', sans-serif;
+  --fm: 'Share Tech Mono', monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: var(--fb);
+  min-height: 100vh;
+  cursor: crosshair;
+  overflow-x: hidden;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ── HEADER ── */
+header {
+  padding: 20px 32px 16px;
+  border-bottom: 3px solid var(--magenta);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.game-title {
+  font-family: var(--fd);
+  font-size: 42px;
+  letter-spacing: 4px;
+  line-height: 1;
+}
+
+.game-title span { color: var(--magenta); }
+
+.hud {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.score-box {
+  text-align: center;
+  border: 2px solid var(--yellow);
+  padding: 6px 20px;
+  background: rgba(245,229,0,0.05);
+}
+
+.score-label {
+  font-family: var(--fm);
+  font-size: 9px;
+  color: #555;
+  letter-spacing: 2px;
+  display: block;
+}
+
+.score-val {
+  font-family: var(--fd);
+  font-size: 32px;
+  color: var(--yellow);
+  line-height: 1;
+  display: block;
+}
+
+.lives {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.life {
+  width: 10px;
+  height: 10px;
+  background: var(--magenta);
+  transition: background .3s, transform .3s;
+}
+
+.life.dead {
+  background: #2a2a2a;
+  transform: scale(0.7);
+}
+
+.btn-reset {
+  font-family: var(--fd);
+  font-size: 18px;
+  letter-spacing: 2px;
+  background: none;
+  border: 2px solid var(--gray3);
+  color: #555;
+  padding: 8px 18px;
+  cursor: pointer;
+  transition: all .15s;
+}
+
+.btn-reset:hover {
+  border-color: var(--magenta);
+  color: var(--magenta);
+}
+
+/* ── BOARD ── */
+.board-wrap {
+  padding: 24px 28px;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+
+/* category headers */
+.cat-header {
+  background: var(--gray);
+  border: 1px solid var(--gray3);
+  border-top: 3px solid var(--magenta);
+  padding: 14px 10px;
+  text-align: center;
+  font-family: var(--fd);
+  font-size: 16px;
+  letter-spacing: 1.5px;
+  color: var(--white);
+  line-height: 1.2;
+  min-height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* question cells */
+.cell {
+  background: var(--gray);
+  border: 1px solid var(--gray3);
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: border-color .15s, transform .15s, background .15s;
+  position: relative;
+  overflow: hidden;
+}
+
+.cell::before {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--magenta), var(--yellow));
+  transform: scaleX(0);
+  transition: transform .2s;
+}
+
+.cell:hover:not(.used)::before { transform: scaleX(1); }
+
+.cell:hover:not(.used) {
+  border-color: var(--magenta);
+  transform: translateY(-2px);
+}
+
+.cell.used {
+  background: #0d0d0d;
+  border-color: #1a1a1a;
+  cursor: default;
+}
+
+.cell-pts {
+  font-family: var(--fd);
+  font-size: 30px;
+  color: var(--yellow);
+  letter-spacing: 1px;
+  transition: color .15s;
+}
+
+.cell:hover:not(.used) .cell-pts { color: var(--white); }
+.cell.used .cell-pts { color: #222; }
+
+/* ── MODAL ── */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.92);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: fadeIn .15s ease;
+}
+
+.overlay.hidden { display: none; }
+
+@keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+
+.modal {
+  background: var(--gray);
+  border: 2px solid var(--magenta);
+  max-width: 680px;
+  width: 100%;
+  position: relative;
+  animation: slideUp .2s ease;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0 }
+  to   { transform: none; opacity: 1 }
+}
+
+.modal-header {
+  background: var(--magenta);
+  padding: 8px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-cat {
+  font-family: var(--fm);
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--black);
+}
+
+.modal-pts {
+  font-family: var(--fd);
+  font-size: 22px;
+  color: var(--black);
+  letter-spacing: 1px;
+}
+
+.modal-body { padding: 32px 28px 24px; }
+
+.modal-q {
+  font-family: var(--fb);
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--white);
+  margin-bottom: 28px;
+}
+
+/* answer options */
+.options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.opt-btn {
+  background: #111;
+  border: 1px solid var(--gray3);
+  color: var(--white);
+  font-family: var(--fb);
+  font-size: 16px;
+  font-weight: 600;
+  padding: 14px 16px;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color .12s, background .12s;
+  line-height: 1.4;
+  position: relative;
+}
+
+.opt-btn:hover:not(:disabled) {
+  border-color: var(--cyan);
+  background: rgba(0,240,255,0.06);
+}
+
+.opt-btn.correct {
+  border-color: #00cc66;
+  background: rgba(0,204,102,0.12);
+  color: #00cc66;
+}
+
+.opt-btn.wrong {
+  border-color: var(--magenta);
+  background: rgba(255,0,118,0.1);
+  color: var(--magenta);
+}
+
+.opt-btn:disabled { cursor: default; }
+
+/* feedback bar */
+.feedback {
+  font-family: var(--fm);
+  font-size: 12px;
+  letter-spacing: 1px;
+  padding: 10px 14px;
+  border-left: 3px solid transparent;
+  background: #0d0d0d;
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  transition: all .2s;
+}
+
+.feedback.correct-fb { border-left-color: #00cc66; color: #00cc66; }
+.feedback.wrong-fb   { border-left-color: var(--magenta); color: var(--magenta); }
+.feedback.hidden-fb  { opacity: 0; }
+
+/* timer bar */
+.timer-wrap {
+  height: 4px;
+  background: #1a1a1a;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.timer-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--cyan), var(--magenta));
+  transition: width linear;
+  width: 100%;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 28px 24px;
+}
+
+.btn-next {
+  font-family: var(--fd);
+  font-size: 20px;
+  letter-spacing: 2px;
+  background: var(--magenta);
+  border: none;
+  color: var(--black);
+  padding: 10px 28px;
+  cursor: pointer;
+  transition: background .15s;
+}
+
+.btn-next:hover { background: var(--yellow); }
+
+/* ── GAME OVER ── */
+.gameover {
+  position: fixed;
+  inset: 0;
+  background: var(--black);
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  animation: fadeIn .3s ease;
+}
+
+.gameover.hidden { display: none; }
+
+.go-title {
+  font-family: var(--fd);
+  font-size: 80px;
+  letter-spacing: 6px;
+  line-height: 1;
+  text-align: center;
+}
+
+.go-score {
+  font-family: var(--fd);
+  font-size: 48px;
+  color: var(--yellow);
+  letter-spacing: 2px;
+}
+
+.go-sub {
+  font-family: var(--fm);
+  font-size: 12px;
+  color: #555;
+  letter-spacing: 2px;
+  text-align: center;
+  max-width: 380px;
+  line-height: 1.8;
+}
+
+.go-rank {
+  font-family: var(--fd);
+  font-size: 28px;
+  letter-spacing: 3px;
+  padding: 10px 28px;
+  border: 2px solid var(--magenta);
+  color: var(--magenta);
+}
+
+.btn-play-again {
+  font-family: var(--fd);
+  font-size: 24px;
+  letter-spacing: 3px;
+  background: var(--magenta);
+  border: none;
+  color: var(--black);
+  padding: 14px 40px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background .15s;
+}
+
+.btn-play-again:hover { background: var(--yellow); }
+
+/* ── STREAK BADGE ── */
+.streak-badge {
+  position: fixed;
+  top: 90px;
+  right: 28px;
+  font-family: var(--fd);
+  font-size: 22px;
+  letter-spacing: 2px;
+  background: var(--yellow);
+  color: var(--black);
+  padding: 6px 16px;
+  z-index: 50;
+  transform: translateX(120%);
+  transition: transform .3s cubic-bezier(.34,1.56,.64,1);
+}
+
+.streak-badge.show { transform: translateX(0); }
+
+@media (max-width: 700px) {
+  .board { grid-template-columns: repeat(5, 1fr); gap: 4px; }
+  .cat-header { font-size: 11px; padding: 8px 4px; min-height: 52px; }
+  .cell-pts { font-size: 20px; }
+  .cell { min-height: 56px; }
+  .options { grid-template-columns: 1fr; }
+  .game-title { font-size: 28px; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div>
+    <div class="game-title">JEOPARD<span>Y</span></div>
+    <div style="font-family:var(--fm);font-size:9px;color:#444;letter-spacing:2px;margin-top:2px;">// LENGUAJES Y AUTÓMATAS II — SCD-1016</div>
+  </div>
+  <div class="hud">
+    <div>
+      <span style="font-family:var(--fm);font-size:9px;color:#444;letter-spacing:2px;display:block;margin-bottom:4px;">// VIDAS</span>
+      <div class="lives" id="lives-hud"></div>
+    </div>
+    <div class="score-box">
+      <span class="score-label">// PUNTOS</span>
+      <span class="score-val" id="score-display">0</span>
+    </div>
+    <button class="btn-reset" onclick="resetGame()">↺ RESET</button>
+  </div>
+</header>
+
+<!-- BOARD -->
+<div class="board-wrap">
+  <div class="board" id="board"></div>
+</div>
+
+<!-- STREAK -->
+<div class="streak-badge" id="streak-badge">🔥 RACHA ×<span id="streak-num">0</span></div>
+
+<!-- MODAL -->
+<div class="overlay hidden" id="overlay">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <span class="modal-cat" id="m-cat"></span>
+      <span class="modal-pts" id="m-pts"></span>
+    </div>
+    <div class="modal-body">
+      <div class="timer-wrap"><div class="timer-bar" id="timer-bar"></div></div>
+      <div class="modal-q" id="m-q"></div>
+      <div class="options" id="m-opts"></div>
+      <div class="feedback hidden-fb" id="m-feedback"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-next" id="btn-next" onclick="closeModal()">CONTINUAR →</button>
+    </div>
+  </div>
+</div>
+
+<!-- GAME OVER -->
+<div class="gameover hidden" id="gameover">
+  <div class="go-title" id="go-title">GAME<br>OVER</div>
+  <div class="go-score" id="go-score"></div>
+  <div class="go-rank" id="go-rank"></div>
+  <div class="go-sub" id="go-sub"></div>
+  <button class="btn-play-again" onclick="resetGame()">JUGAR DE NUEVO</button>
+</div>
+
+<script>
+const CATS = [
+  "ANÁLISIS\nSEMÁNTICO",
+  "CÓDIGO\nINTERMEDIO",
+  "NOTACIONES\nY TRIPLOS",
+  "OPTIMIZACIÓN",
+  "CÓDIGO\nOBJETO"
+];
+
+const POINTS = [100, 200, 300, 400, 500];
+
+/* ── BANCO DE PREGUNTAS [cat][nivel 0-4] ── */
+const QS = [
+  /* ── ANÁLISIS SEMÁNTICO ── */
+  [
+    {
+      q: "¿Cuál es la tarea PRINCIPAL del analizador semántico?",
+      opts: ["Verificar que el código tiene sentido lógico", "Detectar errores de ortografía", "Convertir código a binario", "Generar tokens del código fuente"],
+      ans: 0,
+      exp: "El analizador semántico verifica que el código sea lógicamente correcto: tipos compatibles, variables declaradas, etc."
+    },
+    {
+      q: "Un árbol de expresiones para (a + b) * c tiene en su RAÍZ el operador…",
+      opts: ["+", "*", "a", "c"],
+      ans: 1,
+      exp: "La raíz es el operador de MENOR precedencia. Como * tiene menor precedencia que el paréntesis, * es la raíz."
+    },
+    {
+      q: "Los atributos que se propagan de HIJOS a PADRES en el árbol sintáctico se llaman…",
+      opts: ["Heredados", "Sintetizados", "Globales", "Implícitos"],
+      ans: 1,
+      exp: "Los atributos sintetizados fluyen hacia arriba (hijos → padres). Los heredados fluyen hacia abajo (padres → hijos)."
+    },
+    {
+      q: "¿Qué error semántico ocurre al escribir: int x = \"hola\"; en un lenguaje fuertemente tipado?",
+      opts: ["Error de sintaxis", "Error de incompatibilidad de tipos", "Error de variable no declarada", "No es un error"],
+      ans: 1,
+      exp: "Asignar una cadena a una variable entera es un error de tipo (type mismatch) detectado en el análisis semántico."
+    },
+    {
+      q: "La tabla de símbolos almacena información sobre identificadores. ¿Cuál de estos datos NO suele guardar?",
+      opts: ["Tipo de dato", "Dirección de memoria", "Código fuente completo del programa", "Ámbito (scope)"],
+      ans: 2,
+      exp: "La tabla guarda nombre, tipo, dirección y scope. El código fuente completo no se almacena en la tabla de símbolos."
+    }
+  ],
+
+  /* ── CÓDIGO INTERMEDIO ── */
+  [
+    {
+      q: "¿Cuál es la función del código intermedio en un compilador?",
+      opts: ["Ejecutar el programa directamente", "Servir de puente entre código fuente y código objeto", "Realizar el análisis léxico", "Gestionar la memoria RAM"],
+      ans: 1,
+      exp: "El código intermedio es independiente de la máquina destino y facilita la portabilidad y optimización."
+    },
+    {
+      q: "En los CUÁDRUPLOS, cada instrucción tiene la forma…",
+      opts: ["(op, arg1, arg2)", "(op, resultado)", "(op, arg1, arg2, resultado)", "(etiqueta, op, resultado)"],
+      ans: 2,
+      exp: "Los cuádruplos son: (operador, operando1, operando2, resultado). Usan variables temporales explícitas como t1, t2..."
+    },
+    {
+      q: "¿Cuál es la diferencia clave entre TRIPLES y CUÁDRUPLOS?",
+      opts: [
+        "Los triples usan variables temporales; los cuádruplos no",
+        "Los cuádruplos usan variables temporales; los triples referencian por número de instrucción",
+        "Son exactamente iguales",
+        "Los triples tienen 4 campos; los cuádruplos tienen 3"
+      ],
+      ans: 1,
+      exp: "Los triples referencian resultados por posición (0), (1)... Los cuádruplos usan temporales explícitas t1, t2..."
+    },
+    {
+      q: "Para la instrucción: x = a + b * c, ¿cuántos cuádruplos se generan?",
+      opts: ["1", "2", "3", "4"],
+      ans: 1,
+      exp: "t1 = b * c  y  x = a + t1. Son 2 cuádruplos: uno para la multiplicación y uno para la suma + asignación."
+    },
+    {
+      q: "El Código P (P-Code) fue diseñado originalmente para…",
+      opts: ["El lenguaje C", "El compilador Pascal", "Lenguaje ensamblador x86", "Python"],
+      ans: 1,
+      exp: "El Código P fue creado para Pascal. Es un lenguaje intermedio para una máquina virtual de pila, independiente del hardware."
+    }
+  ],
+
+  /* ── NOTACIONES Y REPRESENTACIONES ── */
+  [
+    {
+      q: "La expresión infija  A + B  en notación POSTFIJA es…",
+      opts: ["+ A B", "A B +", "A + B", "B A +"],
+      ans: 1,
+      exp: "En notación postfija (polaca inversa) el operador va AL FINAL de sus operandos: A B +"
+    },
+    {
+      q: "La expresión infija  (A + B) * C  en notación PREFIJA es…",
+      opts: ["A B + C *", "* + A B C", "+ A * B C", "A + B * C"],
+      ans: 1,
+      exp: "En notación prefija el operador va ANTES: la raíz * va primero, luego + A B, luego C → * + A B C"
+    },
+    {
+      q: "Para evaluar la expresión postfija  3 4 + 2 *  usando una pila, el resultado es…",
+      opts: ["10", "14", "11", "24"],
+      ans: 1,
+      exp: "Paso a paso: push 3, push 4, + → pop ambos, push 7. Push 2, * → pop 7 y 2, push 14. Resultado: 14."
+    },
+    {
+      q: "¿Qué ventaja principal tiene la notación POSTFIJA sobre la infija?",
+      opts: [
+        "Es más fácil de leer para humanos",
+        "No necesita paréntesis ni reglas de precedencia para evaluarse",
+        "Usa menos memoria",
+        "Genera menos instrucciones de ensamblador"
+      ],
+      ans: 1,
+      exp: "La notación postfija se evalúa de izquierda a derecha con una pila, sin necesidad de paréntesis ni precedencia."
+    },
+    {
+      q: "En notación polaca (prefija), la expresión  - * A B + C D  en infija equivale a…",
+      opts: ["A * B - C + D", "(A * B) - (C + D)", "A - B * C + D", "(A - B) * (C + D)"],
+      ans: 1,
+      exp: "Árbol: raíz -, hijo izq (* A B) = A*B, hijo der (+ C D) = C+D. Resultado: (A * B) - (C + D)"
+    }
+  ],
+
+  /* ── OPTIMIZACIÓN ── */
+  [
+    {
+      q: "¿Cuál es el objetivo de la optimización de código?",
+      opts: [
+        "Cambiar el resultado del programa para que sea más rápido",
+        "Transformar el código para que sea más eficiente SIN cambiar el resultado",
+        "Eliminar todos los comentarios del código fuente",
+        "Convertir el código a un lenguaje diferente"
+      ],
+      ans: 1,
+      exp: "La optimización mejora eficiencia (tiempo, memoria) pero NUNCA modifica el resultado del programa."
+    },
+    {
+      q: "La optimización de MIRILLA (peephole) actúa sobre…",
+      opts: [
+        "Todo el flujo del programa completo",
+        "Una ventana pequeña de instrucciones contiguas",
+        "Solo los ciclos del programa",
+        "La tabla de símbolos"
+      ],
+      ans: 1,
+      exp: "Peephole examina una 'ventanilla' de pocas instrucciones y las reemplaza por secuencias más eficientes."
+    },
+    {
+      q: "Sacar código que no cambia en cada iteración FUERA de un ciclo se llama…",
+      opts: ["Reducción de fuerza", "Movimiento de código invariante", "Plegado de constantes", "Eliminación de código muerto"],
+      ans: 1,
+      exp: "El movimiento de código invariante identifica expresiones que no dependen de la variable del ciclo y las mueve afuera."
+    },
+    {
+      q: "La técnica que reemplaza una multiplicación costosa por sumas o desplazamientos se llama…",
+      opts: ["Eliminación de subexpresiones comunes", "Desenrollado de ciclos", "Reducción de fuerza", "Propagación de constantes"],
+      ans: 2,
+      exp: "Reducción de fuerza: sustituye operaciones costosas por equivalentes más baratas. Ej: x*2 → x+x o x<<1"
+    },
+    {
+      q: "Código que NUNCA se ejecuta (después de un return sin condición, por ejemplo) se puede eliminar con…",
+      opts: ["Optimización de ciclos", "Análisis de flujo de datos — eliminación de código muerto", "Mirilla (peephole)", "Reducción de fuerza"],
+      ans: 1,
+      exp: "El análisis de flujo de datos detecta variables y bloques que nunca se alcanzan o cuyos valores nunca se usan → código muerto."
+    }
+  ],
+
+  /* ── CÓDIGO OBJETO ── */
+  [
+    {
+      q: "¿Cuál es el registro x86-64 que actúa como puntero al TOPE de la pila de llamadas?",
+      opts: ["RAX", "RBP", "RSP", "RDI"],
+      ans: 2,
+      exp: "RSP (Stack Pointer) siempre apunta al tope actual de la pila. RBP es el puntero BASE del marco actual."
+    },
+    {
+      q: "En lenguaje ensamblador x86, la instrucción  MOV EAX, [EBX]  usa el modo de direccionamiento…",
+      opts: ["Inmediato", "Directo", "Indirecto por registro", "Indexado"],
+      ans: 2,
+      exp: "Los corchetes [EBX] indican 'el valor en la dirección contenida en EBX' → direccionamiento indirecto por registro."
+    },
+    {
+      q: "El marco de activación (stack frame) creado al llamar una función NO contiene…",
+      opts: ["Variables locales", "Dirección de retorno", "El código fuente de la función", "Parámetros de entrada"],
+      ans: 2,
+      exp: "El frame contiene: parámetros, dirección de retorno, RBP guardado, variables locales y temporales. El código fuente está en el segmento TEXT."
+    },
+    {
+      q: "¿En qué segmento de memoria se almacenan las variables globales INICIALIZADAS de un programa?",
+      opts: ["TEXT", "STACK", "BSS", "DATA"],
+      ans: 3,
+      exp: "DATA: variables globales con valor inicial. BSS: globales sin inicializar. TEXT: instrucciones. STACK: locales y parámetros."
+    },
+    {
+      q: "El proceso de transformar instrucciones en ensamblador a código binario se llama…",
+      opts: ["Compilación", "Enlazado (linking)", "Ensamblado", "Intepretación"],
+      ans: 2,
+      exp: "El ensamblador convierte mnemónicos (MOV, ADD…) a bytes binarios. El linker une los módulos objeto en un ejecutable."
+    }
+  ]
+];
+
+/* ── STATE ── */
+let score = 0;
+let lives = 3;
+let streak = 0;
+let answered = 0;
+let timerInterval = null;
+let timeLeft = 0;
+let currentCell = null;
+let answered_grid = Array.from({length:5}, () => Array(5).fill(false));
+
+/* ── INIT ── */
+function buildBoard() {
+  const board = document.getElementById('board');
+  board.innerHTML = '';
+
+  CATS.forEach(cat => {
+    const h = document.createElement('div');
+    h.className = 'cat-header';
+    h.textContent = cat;
+    board.appendChild(h);
+  });
+
+  POINTS.forEach((pts, row) => {
+    CATS.forEach((_, col) => {
+      const cell = document.createElement('div');
+      cell.className = 'cell' + (answered_grid[col][row] ? ' used' : '');
+      cell.dataset.col = col;
+      cell.dataset.row = row;
+      cell.innerHTML = `<span class="cell-pts">${answered_grid[col][row] ? '' : pts}</span>`;
+      if (!answered_grid[col][row]) {
+        cell.addEventListener('click', () => openQ(col, row, pts));
+      }
+      board.appendChild(cell);
+    });
+  });
+
+  renderHud();
+}
+
+function renderHud() {
+  document.getElementById('score-display').textContent = score.toLocaleString();
+  const lh = document.getElementById('lives-hud');
+  lh.innerHTML = '';
+  for (let i = 0; i < 3; i++) {
+    const d = document.createElement('div');
+    d.className = 'life' + (i >= lives ? ' dead' : '');
+    lh.appendChild(d);
+  }
+}
+
+/* ── OPEN QUESTION ── */
+function openQ(col, row, pts) {
+  if (answered_grid[col][row]) return;
+  currentCell = {col, row, pts};
+
+  const q = QS[col][row];
+  document.getElementById('m-cat').textContent = CATS[col].replace('\n', ' ');
+  document.getElementById('m-pts').textContent = pts + ' PTS';
+  document.getElementById('m-q').textContent = q.q;
+
+  const opts = document.getElementById('m-opts');
+  opts.innerHTML = '';
+  q.opts.forEach((o, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt-btn';
+    btn.textContent = o;
+    btn.dataset.idx = i;
+    btn.addEventListener('click', () => selectAnswer(i, q.ans, pts, q.exp));
+    opts.appendChild(btn);
+  });
+
+  const fb = document.getElementById('m-feedback');
+  fb.className = 'feedback hidden-fb';
+  fb.textContent = '';
+
+  document.getElementById('btn-next').style.display = 'none';
+  document.getElementById('overlay').classList.remove('hidden');
+
+  startTimer(pts);
+}
+
+/* ── TIMER ── */
+function startTimer(pts) {
+  clearInterval(timerInterval);
+  const bar = document.getElementById('timer-bar');
+  const duration = 20000;
+  const start = Date.now();
+  bar.style.transition = 'none';
+  bar.style.width = '100%';
+
+  setTimeout(() => {
+    bar.style.transition = `width ${duration}ms linear`;
+    bar.style.width = '0%';
+  }, 30);
+
+  timerInterval = setInterval(() => {
+    const elapsed = Date.now() - start;
+    if (elapsed >= duration) {
+      clearInterval(timerInterval);
+      timeExpired(pts);
+    }
+  }, 200);
+}
+
+function timeExpired(pts) {
+  disableOptions();
+  streak = 0;
+  updateStreak();
+  lives--;
+  renderHud();
+
+  const q = QS[currentCell.col][currentCell.row];
+  showFeedback(false, `⏰ TIEMPO — La respuesta era: ${q.opts[q.ans]}. ${q.exp}`);
+  document.getElementById('btn-next').style.display = 'block';
+
+  if (lives <= 0) {
+    setTimeout(() => { closeModal(); showGameOver(); }, 1800);
+  }
+}
+
+/* ── SELECT ANSWER ── */
+function selectAnswer(idx, correct, pts, exp) {
+  clearInterval(timerInterval);
+  disableOptions();
+
+  const btns = document.querySelectorAll('.opt-btn');
+  btns[idx].classList.add(idx === correct ? 'correct' : 'wrong');
+  btns[correct].classList.add('correct');
+
+  if (idx === correct) {
+    streak++;
+    const bonus = streak >= 3 ? Math.floor(pts * 0.5) : 0;
+    score += pts + bonus;
+    updateStreak();
+    const msg = streak >= 3
+      ? `✓ CORRECTO  +${pts}  🔥 BONUS RACHA +${bonus}`
+      : `✓ CORRECTO  +${pts} PUNTOS`;
+    showFeedback(true, msg + (exp ? `  —  ${exp}` : ''));
+  } else {
+    streak = 0;
+    updateStreak();
+    lives--;
+    renderHud();
+    showFeedback(false, `✗ INCORRECTO  —  ${exp}`);
+  }
+
+  renderHud();
+  answered_grid[currentCell.col][currentCell.row] = true;
+  answered++;
+  document.getElementById('btn-next').style.display = 'block';
+
+  if (lives <= 0) {
+    setTimeout(() => { closeModal(); showGameOver(); }, 1800);
+    return;
+  }
+
+  if (answered >= 25) {
+    setTimeout(() => { closeModal(); showGameOver(); }, 1200);
+  }
+}
+
+function disableOptions() {
+  document.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
+}
+
+function showFeedback(ok, msg) {
+  const fb = document.getElementById('m-feedback');
+  fb.className = 'feedback ' + (ok ? 'correct-fb' : 'wrong-fb');
+  fb.textContent = msg;
+}
+
+/* ── STREAK BADGE ── */
+function updateStreak() {
+  const badge = document.getElementById('streak-badge');
+  document.getElementById('streak-num').textContent = streak;
+  if (streak >= 2) {
+    badge.classList.add('show');
+    setTimeout(() => badge.classList.remove('show'), 2000);
+  }
+}
+
+/* ── CLOSE MODAL ── */
+function closeModal() {
+  clearInterval(timerInterval);
+  document.getElementById('overlay').classList.add('hidden');
+  buildBoard();
+}
+
+/* ── GAME OVER ── */
+function showGameOver() {
+  const go = document.getElementById('gameover');
+  go.classList.remove('hidden');
+
+  const allRight = lives > 0 && answered >= 25;
+  document.getElementById('go-title').innerHTML = allRight ? 'BUEN<br>JUEGO' : 'GAME<br>OVER';
+  document.getElementById('go-score').textContent = score.toLocaleString() + ' PTS';
+
+  let rank, sub;
+  if (score >= 8000)      { rank = '// COMPILADOR MASTER';  sub = 'Le entiendes al 100. Aho & Ullman estarían orgullosos.'; }
+  else if (score >= 5000) { rank = '// SENIOR DEVELOPER';   sub = 'Muy buena racha. Sigue practicando las unidades finales.'; }
+  else if (score >= 2500) { rank = '// JUNIOR DEV';         sub = 'Vamos bien. Repasa código intermedio y optimización.'; }
+  else if (score >= 1000) { rank = '// TRAINEE';            sub = 'No estuvo mal para empezar. ¡Vuelve a intentarlo!'; }
+  else                    { rank = '// ERROR 404';          sub = 'Al menos el compilador compila... más o menos. Se intentó.'; }
+
+  document.getElementById('go-rank').textContent = rank;
+  document.getElementById('go-sub').textContent = sub;
+}
+
+/* ── RESET ── */
+function resetGame() {
+  clearInterval(timerInterval);
+  score = 0; lives = 3; streak = 0; answered = 0;
+  answered_grid = Array.from({length:5}, () => Array(5).fill(false));
+  document.getElementById('overlay').classList.add('hidden');
+  document.getElementById('gameover').classList.add('hidden');
+  buildBoard();
+}
+
+buildBoard();
+</script>
+</body>
+</html>
